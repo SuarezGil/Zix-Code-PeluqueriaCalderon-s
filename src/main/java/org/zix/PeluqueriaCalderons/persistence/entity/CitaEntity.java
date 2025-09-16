@@ -1,4 +1,4 @@
-package org.zix.PeluqueriaCalderons;
+package org.zix.PeluqueriaCalderons.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
