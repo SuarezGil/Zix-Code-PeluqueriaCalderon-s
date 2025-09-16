@@ -1,0 +1,18 @@
+package org.zix.PeluqueriaCalderons.dominio.dto;
+
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+
+import java.time.LocalDate;
+
+public record ModClienteDto (
+        @NotBlank(message = "El nombre del cliente es obligatorio")
+        String name,
+        @PastOrPresent(message = "La fecha de registro debe ser anterior a la fecha actual")
+        LocalDate registrationtDate,
+        @NotBlank(message = "El correo del cliente es obligatorio")
+        String email
+){
+}

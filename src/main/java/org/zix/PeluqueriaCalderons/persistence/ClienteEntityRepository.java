@@ -1,71 +1,71 @@
 package org.zix.PeluqueriaCalderons.persistence;
 
+import org.springframework.stereotype.Repository;
+import org.zix.PeluqueriaCalderons.dominio.dto.ClienteDto;
+import org.zix.PeluqueriaCalderons.dominio.dto.ModClienteDto;
+import org.zix.PeluqueriaCalderons.dominio.exception.ClienteNoExisteException;
+import org.zix.PeluqueriaCalderons.dominio.exception.ClienteYaExisteException;
 import org.zix.PeluqueriaCalderons.dominio.repository.ClienteRepository;
 import org.zix.PeluqueriaCalderons.persistence.crud.CrudClienteEntity;
+import org.zix.PeluqueriaCalderons.persistence.entity.ClienteEntity;
+import org.zix.PeluqueriaCalderons.web.mapper.ClienteMapper;
 
 import java.util.List;
 
-public class ClienteEntityRepository implements ClienteRepository {
-        private final CrudClienteEntity crudCliente;
+@Repository
+    public class ClienteEntityRepository implements ClienteRepository {
+
+    private final CrudClienteEntity crudCliente;
     private final ClienteMapper clienteMapper;
 
-    public PeliculaEntityRepository(CrudPeliculaEntity crudPelicula, PeliculaMapper peliculaMapper) {
-        this.crudPelicula = crudPelicula;
-        this.peliculaMapper = peliculaMapper;
-    }
-
-
-    @Override
-    public List<PeliculaDto> obtenerTodo() {
-        return this.peliculaMapper.toDto(this.crudPelicula.findAll());
+    public ClienteEntityRepository(CrudClienteEntity crudCliente, ClienteMapper clienteMapper) {
+        this.crudCliente = crudCliente;
+        this.clienteMapper = clienteMapper;
     }
 
     @Override
-    public PeliculaDto obtenerPeliculaPorCodigo(Long codigo) {
-        return this.peliculaMapper.toDto(this.crudPelicula.findById(codigo).orElse(null));
-
+    public List<ClienteDto> obtenerTodo() {
+        return this.clienteMapper.toDto(this.crudCliente.findAll());
     }
 
     @Override
-    public PeliculaDto guardarPelicula(PeliculaDto peliculaDto) {
-        //buscarportitulo
-        //instanciar clase de entidad
-        //convertir dto a entidad
-        PeliculaEntity pelicula = this.peliculaMapper.toEntity(peliculaDto);
-        pelicula.setEstado("D");
-        if (this.crudPelicula.findFirstByNombre(peliculaDto.name())!=null){
-            throw new PeliculaYaExisteException(peliculaDto.name());
+    public ClienteDto obtenerClientePorCodigo(Long codigo) {
+        return this.clienteMapper.toDto(this.crudCliente.findById(codigo).orElse(null));
+    }
+
+    @Override
+    public ClienteDto guardarCliente(ClienteDto clienteDto) {
+        ClienteEntity cliente = this.clienteMapper.toEntity(clienteDto);
+        if (this.crudCliente.findFirstByCorreo(clienteDto.email())!=null){
+            throw new ClienteYaExisteException(clienteDto.email());
         }
         //guardar en la DB con JPA
-        this.crudPelicula.save(pelicula);
+        this.crudCliente.save(cliente);
         //Retornar el valor guardado como DTO
-        return this.peliculaMapper.toDto(pelicula);
+        return this.clienteMapper.toDto(cliente);
     }
 
     @Override
-    public PeliculaDto modificarPelicula(Long codigo, ModPeliculaDto modPeliculaDto) {
-        PeliculaEntity pelicula = this.crudPelicula.findById(codigo).orElse(null);
+    public ClienteDto modificarCliente(Long codigo, ModClienteDto modClienteDto) {
+        ClienteEntity cliente = this.crudCliente.findById(codigo).orElse(null);
 //        pelicula.setNombre(modPeliculaDto.name());
 //        pelicula.setFechaEstreno(modPeliculaDto.releaseDate());
 //        pelicula.setCalificacion(BigDecimal.valueOf(modPeliculaDto.rating()));
 //        this.crudPelicula.save(pelicula);
 //        return this.peliculaMapper.toDto(pelicula);
-        if (pelicula == null) {throw new PeliculaNoExisteException(codigo);
+        if (cliente == null) {throw new ClienteNoExisteException(codigo);
         }
         else{
-            this.peliculaMapper.modificarEntityFromDto(modPeliculaDto, pelicula);
-            return this.peliculaMapper.toDto(this.crudPelicula.save(pelicula));
-        }
-    }
+            this.clienteMapper.modificarEntityFromDto(modClienteDto, cliente);
+            return this.clienteMapper.toDto(this.crudCliente.save(cliente));
+        }    }
 
     @Override
-    public void  eliminarPelicula(Long codigo) {
-        PeliculaEntity peliculaEntity= this.crudPelicula.findById(codigo).orElse(null);
-        if (peliculaEntity == null){
-            throw new PeliculaNoExisteException(codigo);
-        }else{
-            this.crudPelicula.deleteById(codigo);
-        }
+    public void eliminarCliente(Long codigo) {
+    ClienteEntity clienteEntity = this.crudCliente.findById(codigo).orElse(null);
+    if (clienteEntity == null) {throw new ClienteNoExisteException(codigo);
+    }else {
+        this.crudCliente.deleteById(codigo);
     }
-}
+    }
 }
