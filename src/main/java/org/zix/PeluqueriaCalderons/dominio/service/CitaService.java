@@ -1,4 +1,8 @@
-package org.zix.PeluqueriaCalderons;
+package org.zix.PeluqueriaCalderons.dominio.service;
+
+import org.zix.PeluqueriaCalderons.dominio.dto.CitaDto;
+import org.zix.PeluqueriaCalderons.dominio.dto.ModCitaDto;
+import org.zix.PeluqueriaCalderons.dominio.repository.CitaRepository;
 
 import java.util.List;
 
@@ -18,10 +22,11 @@ public class CitaService {
         return this.citaRepository.buscarPorId(codigo);
     }
 
-    public CitaDto guardarCita(CitaDto peliculaDto){
+    public CitaDto guardarCita(CitaDto citaDto){
         return this.citaRepository.guardarCita(citaDto);
 
     }
+
     public CitaDto modificarCita(Long codigo, ModCitaDto citaDto){
         return this.citaRepository.modificarCita(codigo ,citaDto);
     }

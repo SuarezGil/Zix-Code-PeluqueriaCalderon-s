@@ -1,4 +1,8 @@
-package org.zix.PeluqueriaCalderons;
+package org.zix.PeluqueriaCalderons.web.mapper;
+
+import org.mapstruct.Mapping;
+import org.zix.PeluqueriaCalderons.persistence.entity.CitaEntity;
+import org.zix.PeluqueriaCalderons.dominio.dto.CitaDto;
 
 import java.util.List;
 
