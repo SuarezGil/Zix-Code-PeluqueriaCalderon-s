@@ -1,5 +1,7 @@
 package org.zix.PeluqueriaCalderons;
 
+import org.mapstruct.Mapping;
+
 import java.util.List;
 
 public interface CitaMapper {
