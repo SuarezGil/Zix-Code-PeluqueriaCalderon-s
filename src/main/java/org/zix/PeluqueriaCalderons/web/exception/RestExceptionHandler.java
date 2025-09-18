@@ -2,16 +2,14 @@ package org.zix.PeluqueriaCalderons.web.exception;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.zix.PeluqueriaCalderons.dominio.exception.ClienteNoExisteException;
-import org.zix.PeluqueriaCalderons.dominio.exception.ClienteYaExisteException;
-import org.zix.PeluqueriaCalderons.dominio.exception.UsuarioNoExisteException;
-import org.zix.PeluqueriaCalderons.dominio.exception.Error;
+import org.zix.PeluqueriaCalderons.dominio.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.zix.PeluqueriaCalderons.dominio.exception.Error;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -90,6 +88,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.badRequest().body(errores);
     }
+
+    @ExceptionHandler(ServicioYaExisteException.class)
+    public  ResponseEntity<Error> handleException(ServicioYaExisteException ex){
+        Error error = new Error("servicio_ya_existe", ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(ServicioNoExisteException.class)
+    public  ResponseEntity<Error> handleException(ServicioNoExisteException ex){
+        Error error = new Error("servicio_no_existe", ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
+
 
 }
 
