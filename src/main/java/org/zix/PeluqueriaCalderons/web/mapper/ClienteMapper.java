@@ -29,10 +29,10 @@ public interface ClienteMapper {
         ClienteEntity toEntity(ClienteDto dto);
 
 
-        @Mapping(source = "name", target = "nombre")
-        @Mapping(source = "tel", target = "telefono")
-        @Mapping(source = "email", target = "correo")
-        @Mapping(source = "fechaRegistro", target = "registrationDate")
+    @Mapping(source = "name", target = "nombre")
+    @Mapping(source = "tel", target = "telefono")
+    @Mapping(source = "email", target = "correo")
+    @Mapping(source = "registrationDate", target = "fechaRegistro") // ✅ corregido
         public void modificarEntityFromDto(ModClienteDto modClienteDto, @MappingTarget ClienteEntity entity);
 
 }

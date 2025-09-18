@@ -1,6 +1,5 @@
 package org.zix.PeluqueriaCalderons.web.controller;
 
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,50 +22,51 @@ public class ClienteController {
     private final ClienteService clienteService;
 
     public ClienteController(ClienteService clienteService) {
-
         this.clienteService = clienteService;
     }
+
     //4
     @GetMapping
-    public ResponseEntity<List<ClienteDto>> obtenerTodo(){
-        //200: OK
-        //404: Not Found, no existe, mal nombre
-        //500: Internal Server Error, error de lógica
-        //405: Method de solicitud incorrecto, el verbo no es correcto
-        //return this.peliculaService.obtenerTodo();
+    public ResponseEntity<List<ClienteDto>> obtenerTodo() {
         return ResponseEntity.ok(this.clienteService.obtenerTodo());
     }
-    @GetMapping("{codigo}")
-    @Operation( summary = "Obtener un cliente a partir de su identificador",
-            description = "Retorna al cliente que coincida con el identificador envidio",
-            responses ={
-                    @ApiResponse(responseCode = "200", description = "Cliente fue encontrada con exito"),
-                    @ApiResponse(responseCode = "404", description = "Cliente no encontrada", content = @Content)
-            })
 
-    public ResponseEntity<ClienteDto> obtenerClientePorCodigo(@Parameter(description ="Identificador del cliente a recuperar", example = "S")@PathVariable Long codigo){
-        //return this.peliculaService.obtenerPeliculaPorCodigo(codigo);
+    @GetMapping("{codigo}")
+    @Operation(summary = "Obtener un cliente a partir de su identificador",
+            description = "Retorna al cliente que coincida con el identificador enviado",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Cliente fue encontrado con éxito"),
+                    @ApiResponse(responseCode = "404", description = "Cliente no encontrado", content = @Content)
+            })
+    public ResponseEntity<ClienteDto> obtenerClientePorCodigo(
+            @Parameter(description = "Identificador del cliente a recuperar", example = "1")
+            @PathVariable Long codigo) {
         return ResponseEntity.ok(this.clienteService.obtenerClientePorCodigo(codigo));
     }
-    //guardar pelicula
+
+    //guardar cliente
     @PostMapping
-    public ResponseEntity<ClienteDto> guardarCliente(@RequestBody ClienteDto clienteDto){
-        //return this.peliculaService.guardarPelicula(peliculaDto);
+    public ResponseEntity<ClienteDto> guardarCliente(@Valid  @RequestBody ClienteDto clienteDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.clienteService.guardarCliente(clienteDto));
     }
-    //modificar pelicula
+
+    //modificar cliente
     @PutMapping("{codigo}")
-    public ResponseEntity<ClienteDto> modificarCliente(@PathVariable Long codigo, @RequestBody @Valid ModClienteDto modClienteDto){
-        return ResponseEntity.ok().build();
-    }
-    //eliminar pelicula
-    @DeleteMapping("{codigo}")
-    public  ResponseEntity<ClienteDto> eliminarCliente(@PathVariable Long codigo){
-        this.clienteService.eliminarCliente(codigo);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ClienteDto> modificarCliente(
+            @PathVariable Long codigo,
+            @RequestBody @Valid ModClienteDto modClienteDto) {
+        ClienteDto clienteActualizado = this.clienteService.modificarCliente(codigo, modClienteDto);
+        return ResponseEntity.ok(clienteActualizado);
     }
 
-    //exception - peliculaNoExiste - PeliculaYaExiste
+    //eliminar cliente
+    @DeleteMapping("{codigo}")
+    public ResponseEntity<Void> eliminarCliente(@PathVariable Long codigo) {
+        this.clienteService.eliminarCliente(codigo);
+        return ResponseEntity.noContent().build();
+    }
+
+    //exception - clienteNoExiste - ClienteYaExiste
 
     //Consulta a la IA
 
@@ -74,4 +74,3 @@ public class ClienteController {
 
     //Documentación (dependencias)
 }
-

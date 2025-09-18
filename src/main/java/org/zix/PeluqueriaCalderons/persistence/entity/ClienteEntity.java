@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "Clientes")
 @Data
-public class ClienteEntity {
+public class  ClienteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codigo;
@@ -20,6 +20,6 @@ public class ClienteEntity {
     @Column(length = 40, nullable = false)
     private String correo;
     @Column(name = "fecha_registro")
-    private LocalDate fechaRegsitro;
+    private LocalDate fechaRegistro;
 }
 

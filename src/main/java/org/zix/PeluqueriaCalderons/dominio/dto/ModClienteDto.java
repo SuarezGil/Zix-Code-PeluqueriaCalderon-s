@@ -10,9 +10,14 @@ import java.time.LocalDate;
 public record ModClienteDto (
         @NotBlank(message = "El nombre del cliente es obligatorio")
         String name,
-        @PastOrPresent(message = "La fecha de registro debe ser anterior a la fecha actual")
-        LocalDate registrationtDate,
+        @NotBlank(message = "El telefono del cliente es obligatorio")
+        String tel,
+
         @NotBlank(message = "El correo del cliente es obligatorio")
-        String email
+        String email,
+
+        @PastOrPresent(message = "La fecha de registro debe ser anterior a la fecha actual")
+        LocalDate registrationDate
+
 ){
 }

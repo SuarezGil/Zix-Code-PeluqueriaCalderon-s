@@ -25,12 +25,14 @@ import java.util.List;
 
     @Override
     public List<ClienteDto> obtenerTodo() {
+
         return this.clienteMapper.toDto(this.crudCliente.findAll());
     }
 
     @Override
     public ClienteDto obtenerClientePorCodigo(Long codigo) {
-        return this.clienteMapper.toDto(this.crudCliente.findById(codigo).orElse(null));
+        ClienteEntity cliente = this.crudCliente.findById(codigo).orElseThrow(()-> new ClienteNoExisteException(codigo));
+        return this.clienteMapper.toDto(cliente);
     }
 
     @Override
