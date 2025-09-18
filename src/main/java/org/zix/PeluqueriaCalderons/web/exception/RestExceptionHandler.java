@@ -1,5 +1,9 @@
 package org.zix.PeluqueriaCalderons.web.exception;
 
+import org.springframework.http.HttpStatusCode;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.zix.PeluqueriaCalderons.dominio.exception.ClienteNoExisteException;
+import org.zix.PeluqueriaCalderons.dominio.exception.ClienteYaExisteException;
 import org.zix.PeluqueriaCalderons.dominio.exception.UsuarioNoExisteException;
 import org.zix.PeluqueriaCalderons.dominio.exception.Error;
 import org.springframework.http.HttpStatus;
@@ -10,6 +14,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -57,4 +63,36 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ClienteYaExisteException.class)
+    public  ResponseEntity<Error> handleException(ClienteYaExisteException ex){
+        Error error = new Error("cliente_ya_existe", ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(ClienteNoExisteException.class)
+    public  ResponseEntity<Error> handleException(ClienteNoExisteException ex){
+        Error error = new Error("cliente_no_existe", ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            org.springframework.http.HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+
+        List<Error> errores = new ArrayList<>();
+        ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
+            errores.add(new Error(fieldError.getField(), fieldError.getDefaultMessage()));
+        });
+
+        return ResponseEntity.badRequest().body(errores);
+    }
+
 }
+
+
+
+
