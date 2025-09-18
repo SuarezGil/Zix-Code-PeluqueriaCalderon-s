@@ -4,6 +4,8 @@ import org.mapstruct.Mapping;
 import org.zix.PeluqueriaCalderons.persistence.entity.CitaEntity;
 import org.zix.PeluqueriaCalderons.dominio.dto.CitaDto;
 
+import org.mapstruct.Mapping;
+
 import java.util.List;
 
 public interface CitaMapper {
