@@ -5,6 +5,7 @@ import org.zix.PeluqueriaCalderons.dominio.dto.UsuarioDto;
 import org.zix.PeluqueriaCalderons.dominio.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.zix.PeluqueriaCalderons.persistence.entity.UsuarioEntity;
 
@@ -18,7 +19,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping("/login")
-    public ResponseEntity<UsuarioDto> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@Validated @RequestBody LoginRequest loginRequest) {
         UsuarioDto usuario = usuarioService.autenticar(
                 loginRequest.getUsername(),
                 loginRequest.getPassword()
@@ -27,7 +28,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDto> crearUsuario(@RequestBody UsuarioDto usuarioDto) {
+    public ResponseEntity<?> crearUsuario(@Validated @RequestBody UsuarioDto usuarioDto) {
         UsuarioDto usuarioCreado = usuarioService.crearUsuario(usuarioDto);
         return ResponseEntity.ok(usuarioCreado);
     }
@@ -63,7 +64,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDto> actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDto usuarioDto) {
+    public ResponseEntity<?> actualizarUsuario(@PathVariable Long id, @Validated @RequestBody UsuarioDto usuarioDto) {
         UsuarioDto usuarioActualizado = usuarioService.actualizarUsuario(id, usuarioDto);
         return ResponseEntity.ok(usuarioActualizado);
     }
@@ -97,6 +98,4 @@ public class UsuarioController {
         boolean existe = usuarioService.existeUsername(username);
         return ResponseEntity.ok(existe);
     }
-
-
 }

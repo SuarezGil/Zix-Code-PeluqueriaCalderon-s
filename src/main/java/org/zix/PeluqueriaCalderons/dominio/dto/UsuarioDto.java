@@ -1,15 +1,31 @@
 package org.zix.PeluqueriaCalderons.dominio.dto;
 
 import org.zix.PeluqueriaCalderons.persistence.entity.UsuarioEntity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 
 public class UsuarioDto {
 
     private Long id;
+
+    @NotBlank(message = "El username es obligatorio")
+    @Size(min = 3, max = 50, message = "El username debe tener entre 3 y 50 caracteres")
+    @Size(message = "El username solo puede contener letras, números y guiones bajos")
     private String username;
+
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
+
+    @NotNull(message = "El rol es obligatorio")
     private UsuarioEntity.Rol rol;
+
     private LocalDateTime fechaCreacion;
+
+    @NotNull(message = "El estado activo es obligatorio")
     private Boolean activo;
 
     // Constructores

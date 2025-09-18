@@ -1,97 +1,56 @@
 package org.zix.PeluqueriaCalderons.web.exception;
-
-import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.zix.PeluqueriaCalderons.dominio.exception.ClienteNoExisteException;
-import org.zix.PeluqueriaCalderons.dominio.exception.ClienteYaExisteException;
-import org.zix.PeluqueriaCalderons.dominio.exception.UsuarioNoExisteException;
-import org.zix.PeluqueriaCalderons.dominio.exception.Error;
-import org.springframework.http.HttpStatus;
+import org.zix.PeluqueriaCalderons.dominio.exception.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.zix.PeluqueriaCalderons.dominio.exception.Error;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-@RestControllerAdvice
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-
-    @ExceptionHandler(UsuarioNoExisteException.class)
-    public ResponseEntity<Error> handleUsuarioNoExisteException(UsuarioNoExisteException ex, WebRequest request) {
-        Error error = new Error(
-                HttpStatus.NOT_FOUND.value(),
-                "Usuario no encontrado",
-                ex.getMessage(),
-                request.getDescription(false).replace("uri=", "")
-        );
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Error> handleGlobalException(Exception ex, WebRequest request) {
-        Error error = new Error(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Error interno del servidor",
-                ex.getMessage(),
-                request.getDescription(false).replace("uri=", "")
-        );
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Error> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
-        Error error = new Error(
-                HttpStatus.BAD_REQUEST.value(),
-                "Solicitud inválida",
-                ex.getMessage(),
-                request.getDescription(false).replace("uri=", "")
-        );
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Error> handleRuntimeException(RuntimeException ex, WebRequest request) {
-        Error error = new Error(
-                HttpStatus.BAD_REQUEST.value(),
-                "Error en la solicitud",
-                ex.getMessage(),
-                request.getDescription(false).replace("uri=", "")
-        );
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
+@ControllerAdvice
+public class RestExceptionHandler {
 
     @ExceptionHandler(ClienteYaExisteException.class)
-    public  ResponseEntity<Error> handleException(ClienteYaExisteException ex){
+    public ResponseEntity<Error> handleException(ClienteYaExisteException ex){
         Error error = new Error("cliente_ya_existe", ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
     @ExceptionHandler(ClienteNoExisteException.class)
-    public  ResponseEntity<Error> handleException(ClienteNoExisteException ex){
+    public ResponseEntity<Error> handleException(ClienteNoExisteException ex){
         Error error = new Error("cliente_no_existe", ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            org.springframework.http.HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request) {
-
-        List<Error> errores = new ArrayList<>();
-        ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
-            errores.add(new Error(fieldError.getField(), fieldError.getDefaultMessage()));
-        });
-
-        return ResponseEntity.badRequest().body(errores);
+    @ExceptionHandler(EmpleadoYaExistsException.class)
+    public ResponseEntity<Error> handleException(EmpleadoYaExistsException ex){
+        Error error = new Error("empleado_ya_existe", ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
     }
 
+    @ExceptionHandler(EmpleadoNoExistsException.class)
+    public ResponseEntity<Error> handleException(EmpleadoNoExistsException ex){
+        Error error = new Error("empleado_no_existe", ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(UsuarioNoExisteException.class)
+    public ResponseEntity<Error> handleException(UsuarioNoExisteException ex){
+        Error error = new Error("usuario_no_existe", ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            errors.put(error.getField(), error.getDefaultMessage());
+        });
+        return ResponseEntity.badRequest().body(errors);
+    }
 }
+
 
 
 
