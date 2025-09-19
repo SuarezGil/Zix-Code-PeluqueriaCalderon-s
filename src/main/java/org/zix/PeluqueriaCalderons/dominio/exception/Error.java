@@ -21,6 +21,12 @@ public class Error {
         this.path = path;
     }
 
+    public Error(String error, String message) {
+        this();
+        this.error = error;
+        this.message = message;
+    }
+
 
     public LocalDateTime getTimestamp() {
         return timestamp;

@@ -34,6 +34,7 @@ public class UsuarioEntity {
     @Column(name = "activo")
     private Boolean activo = true;
 
+
     // Constructor vacío
     public UsuarioEntity() {
         this.fechaCreacion = LocalDateTime.now();
