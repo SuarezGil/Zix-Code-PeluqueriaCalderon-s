@@ -103,13 +103,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CitaNoExisteException.class)
     public  ResponseEntity<Error> handleException(CitaNoExisteException ex){
-        Error error = new Error("cita_ya_existe", ex.getMessage());
+        Error error = new Error("cita_no_existe", ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
     @ExceptionHandler(CitaYaExisteException.class)
     public  ResponseEntity<Error> handleException(CitaYaExisteException ex){
-        Error error = new Error("cita_no_existe", ex.getMessage());
+        Error error = new Error("cita_ya_existe", ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
