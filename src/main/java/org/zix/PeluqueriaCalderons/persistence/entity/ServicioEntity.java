@@ -10,7 +10,8 @@ import lombok.Data;
 public class ServicioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long codigo;
+    @Column(name = "codigo_servicio")
+    private Long codigoServicio;
 
     @Column(length = 100,  nullable = false, unique = true)
     private String nombre;

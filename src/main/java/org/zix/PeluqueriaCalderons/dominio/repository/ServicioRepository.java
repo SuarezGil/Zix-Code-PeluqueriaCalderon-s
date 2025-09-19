@@ -12,9 +12,9 @@ import java.util.List;
 
 public interface ServicioRepository  {
     List<ServicioDto> obtenerTodo();
-    ServicioDto obtenerServicioPorCodigo(Long codigo);
+    ServicioDto obtenerServicioPorCodigo(Long codigoServicio);
     ServicioDto guardarServicio(ServicioDto servicioDto);
-    ServicioDto modificarServicio(Long codigo, ModServicioDto servicioDto);
-    void eliminarServicio(Long codigo);
+    ServicioDto modificarServicio(Long codigoServicio, ModServicioDto servicioDto);
+    void eliminarServicio(Long codigoServicio);
 }
 

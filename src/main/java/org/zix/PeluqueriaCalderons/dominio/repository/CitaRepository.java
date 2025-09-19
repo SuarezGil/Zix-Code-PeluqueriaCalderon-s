@@ -7,9 +7,8 @@ import java.util.List;
 
 public interface CitaRepository {
     List<CitaDto> obtenerTodo();
-    CitaDto buscarPorId(Long codigo);
-    CitaDto guardarCita(CitaDto citaDto);
-    void eliminarCita(Long codigo);
-
+    CitaDto buscarCitaPorCodigo(Long codigo);
+    CitaDto guardarCita(ModCitaDto citaDto);
     CitaDto modificarCita(Long codigo, ModCitaDto citaDto);
+    void eliminarCita(Long codigo);
 }

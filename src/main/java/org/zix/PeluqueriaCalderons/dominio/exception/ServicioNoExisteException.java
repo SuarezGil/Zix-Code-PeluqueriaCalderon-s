@@ -1,8 +1,8 @@
 package org.zix.PeluqueriaCalderons.dominio.exception;
 
 public class ServicioNoExisteException extends RuntimeException {
-    public ServicioNoExisteException(Long codigo) {
+    public ServicioNoExisteException(Long codigoServicio) {
 
-        super("El servicio con el codigo " + codigo + " no existe");
+        super("El servicio con el codigo " + codigoServicio + " no existe");
     }
 }

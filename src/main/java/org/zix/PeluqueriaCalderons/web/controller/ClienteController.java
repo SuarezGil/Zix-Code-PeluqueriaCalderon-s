@@ -31,7 +31,7 @@ public class ClienteController {
         return ResponseEntity.ok(this.clienteService.obtenerTodo());
     }
 
-    @GetMapping("{codigo}")
+    @GetMapping("{codigoCliente}")
     @Operation(summary = "Obtener un cliente a partir de su identificador",
             description = "Retorna al cliente que coincida con el identificador enviado",
             responses = {
@@ -40,8 +40,8 @@ public class ClienteController {
             })
     public ResponseEntity<ClienteDto> obtenerClientePorCodigo(
             @Parameter(description = "Identificador del cliente a recuperar", example = "1")
-            @PathVariable Long codigo) {
-        return ResponseEntity.ok(this.clienteService.obtenerClientePorCodigo(codigo));
+            @PathVariable Long codigoCliente) {
+        return ResponseEntity.ok(this.clienteService.obtenerClientePorCodigo(codigoCliente));
     }
 
     //guardar cliente
@@ -51,18 +51,18 @@ public class ClienteController {
     }
 
     //modificar cliente
-    @PutMapping("{codigo}")
+    @PutMapping("{codigoCliente}")
     public ResponseEntity<ClienteDto> modificarCliente(
-            @PathVariable Long codigo,
+            @PathVariable Long codigoCliente,
             @RequestBody @Valid ModClienteDto modClienteDto) {
-        ClienteDto clienteActualizado = this.clienteService.modificarCliente(codigo, modClienteDto);
+        ClienteDto clienteActualizado = this.clienteService.modificarCliente(codigoCliente, modClienteDto);
         return ResponseEntity.ok(clienteActualizado);
     }
 
     //eliminar cliente
-    @DeleteMapping("{codigo}")
-    public ResponseEntity<Void> eliminarCliente(@PathVariable Long codigo) {
-        this.clienteService.eliminarCliente(codigo);
+    @DeleteMapping("{codigoCliente}")
+    public ResponseEntity<Void> eliminarCliente(@PathVariable Long codigoCliente) {
+        this.clienteService.eliminarCliente(codigoCliente);
         return ResponseEntity.noContent().build();
     }
 

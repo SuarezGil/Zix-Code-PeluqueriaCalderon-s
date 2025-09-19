@@ -35,7 +35,7 @@ public class ServicioController {
         return ResponseEntity.ok(this.servicioService.obtenerTodo());
     }
 
-    @GetMapping("{codigo}")
+    @GetMapping("{codigoServicio}")
     @Operation(summary = "Obtener un servicio a partir de su identificador",
             description = "Retorna al servicio que coincida con el identificador enviado",
             responses = {
@@ -44,8 +44,8 @@ public class ServicioController {
             })
     public ResponseEntity<ServicioDto> obtenerServicioPorCodigo(
             @Parameter(description = "Identificador del cliente a recuperar", example = "1")
-            @PathVariable Long codigo) {
-        return ResponseEntity.ok(this.servicioService.obtenerServicioPorCodigo(codigo));
+            @PathVariable Long codigoServicio) {
+        return ResponseEntity.ok(this.servicioService.obtenerServicioPorCodigo(codigoServicio));
     }
 
     //guardar cliente
@@ -55,18 +55,18 @@ public class ServicioController {
     }
 
     //modificar cliente
-    @PutMapping("{codigo}")
+    @PutMapping("{codigoServicio}")
     public ResponseEntity<ServicioDto> modificarServicio(
-            @PathVariable Long codigo,
+            @PathVariable Long codigoServicio,
             @RequestBody @Valid ModServicioDto modServicioDto) {
-        ServicioDto servicioActualizado = this.servicioService.modificarServicio(codigo, modServicioDto);
+        ServicioDto servicioActualizado = this.servicioService.modificarServicio(codigoServicio, modServicioDto);
         return ResponseEntity.ok(servicioActualizado);
     }
 
     //eliminar cliente
-    @DeleteMapping("{codigo}")
-    public ResponseEntity<Void> eliminarServicio(@PathVariable Long codigo) {
-        this.servicioService.eliminarServicio(codigo);
+    @DeleteMapping("{codigoServicio}")
+    public ResponseEntity<Void> eliminarServicio(@PathVariable Long codigoServicio) {
+        this.servicioService.eliminarServicio(codigoServicio);
         return ResponseEntity.noContent().build();
     }
 

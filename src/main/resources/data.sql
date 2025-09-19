@@ -13,4 +13,8 @@ INSERT IGNORE INTO clientes (nombre, telefono, correo, fecha_registro) VALUES
 
 INSERT IGNORE INTO servicios (nombre, precio, duracion) VALUES
 ('Corte de pelo', 55.00 ,2),
-       ('Corte de pelo y de barba', 125.00 ,4);
+('Corte de pelo y de barba', 125.00 ,4);
+
+INSERT IGNORE INTO citas (codigo_cliente, codigo_servicio, fecha_hora) VALUES
+(1, 1, '2025-09-18 14:30:00'),
+(2, 2, '2025-09-19 10:00:00');

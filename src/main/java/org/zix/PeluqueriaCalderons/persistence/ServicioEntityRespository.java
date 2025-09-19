@@ -25,12 +25,13 @@ public class ServicioEntityRespository implements ServicioRepository {
 
     @Override
     public List<ServicioDto> obtenerTodo() {
+
         return this.servicioMapper.toDto(this.crudServicio.findAll());
     }
 
     @Override
-    public ServicioDto obtenerServicioPorCodigo(Long codigo) {
-        ServicioEntity servicio = this.crudServicio.findById(codigo).orElseThrow(()->new ServicioNoExisteException(codigo));
+    public ServicioDto obtenerServicioPorCodigo(Long codigoServicio) {
+        ServicioEntity servicio = this.crudServicio.findById(codigoServicio).orElseThrow(()->new ServicioNoExisteException(codigoServicio));
         return this.servicioMapper.toDto(servicio);
     }
 
@@ -45,16 +46,16 @@ public class ServicioEntityRespository implements ServicioRepository {
     }
 
     @Override
-    public ServicioDto modificarServicio(Long codigo, ModServicioDto modServicioDto) {
-        ServicioEntity servicio = this.crudServicio.findById(codigo).orElseThrow(()->new ServicioNoExisteException(codigo));
+    public ServicioDto modificarServicio(Long codigoServicio, ModServicioDto modServicioDto) {
+        ServicioEntity servicio = this.crudServicio.findById(codigoServicio).orElseThrow(()->new ServicioNoExisteException(codigoServicio));
         this.servicioMapper.modificarEntityFromDto(modServicioDto, servicio);
         return this.servicioMapper.toDto(this.crudServicio.save(servicio));
     }
 
     @Override
-    public void eliminarServicio(Long codigo) {
-        ServicioEntity servicioEntity = this.crudServicio.findById(codigo).orElseThrow(()->new ServicioNoExisteException(codigo));
-         this.crudServicio.deleteById(codigo);
+    public void eliminarServicio(Long codigoServicio) {
+        ServicioEntity servicioEntity = this.crudServicio.findById(codigoServicio).orElseThrow(()->new ServicioNoExisteException(codigoServicio));
+         this.crudServicio.deleteById(codigoServicio);
 
     }
 }

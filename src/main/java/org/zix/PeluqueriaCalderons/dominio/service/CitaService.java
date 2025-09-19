@@ -1,29 +1,34 @@
 package org.zix.PeluqueriaCalderons.dominio.service;
 
+import org.springframework.stereotype.Service;
 import org.zix.PeluqueriaCalderons.dominio.dto.CitaDto;
 import org.zix.PeluqueriaCalderons.dominio.dto.ModCitaDto;
 import org.zix.PeluqueriaCalderons.dominio.repository.CitaRepository;
 
 import java.util.List;
 
+@Service
 public class CitaService {
     private final CitaRepository citaRepository;
 
     public CitaService(CitaRepository citaRepository) {
+
         this.citaRepository = citaRepository;
     }
 
 
     public List<CitaDto> obtenerTodo() {
+
         return this.citaRepository.obtenerTodo();
     }
 
-    public  CitaDto buscarPorId(Long codigo){
-        return this.citaRepository.buscarPorId(codigo);
+    public  CitaDto buscarCitaPorCodigo(Long codigo){
+
+        return this.citaRepository.buscarCitaPorCodigo(codigo);
     }
 
-    public CitaDto guardarCita(CitaDto citaDto){
-        return this.citaRepository.guardarCita(citaDto);
+    public CitaDto guardarCita(ModCitaDto modCitaDto){
+        return this.citaRepository.guardarCita(modCitaDto);
 
     }
 
