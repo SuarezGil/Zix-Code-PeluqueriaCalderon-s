@@ -1,4 +1,5 @@
 package org.zix.PeluqueriaCalderons.web.exception;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.zix.PeluqueriaCalderons.dominio.exception.*;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(UsuarioNoExisteException.class)
     public ResponseEntity<Error> handleException(UsuarioNoExisteException ex){
         Error error = new Error("usuario_no_existe", ex.getMessage());
-        return ResponseEntity.badRequest().body(error);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -49,6 +50,8 @@ public class RestExceptionHandler {
         });
         return ResponseEntity.badRequest().body(errors);
     }
+
+
 }
 
 

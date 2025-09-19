@@ -18,3 +18,6 @@ INSERT IGNORE INTO empleados (nombre, email, telefono, puesto, fecha_contratacio
 ('Mario Rodriguez', 'mario.rodriguez@peluqueriacalderon.com', '5551-2347', 'Barbero', '2023-01-04', true),
 ('Ana Garcia', 'ana.garcia@peluqueriacalderon.com', '5551-2348', 'Colorista', '2023-01-05', true),
 ('Jorge Lopez', 'jorge.lopez@peluqueriacalderon.com', '5551-2349', 'Estilista', '2023-01-06', false);
+
+
+

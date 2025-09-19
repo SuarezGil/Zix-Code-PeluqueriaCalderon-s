@@ -12,7 +12,7 @@ public class EmpleadoDto {
 
     @NotBlank(message = "El email es obligatorio")
     @Email(message = "El formato del email no es válido")
-    @Size(max = 100, message = "El email no puede exceder 100 caracteres")
+    @Size(message = "El email no puede exceder 100 caracteres")
     private String email;
 
     @NotBlank(message = "El teléfono es obligatorio")
@@ -20,7 +20,7 @@ public class EmpleadoDto {
     private String telefono;
 
     @NotBlank(message = "El puesto es obligatorio")
-    @Size(min = 2, max = 50, message = "El puesto debe tener entre 2 y 50 caracteres")
+    @Size(message = "El puesto debe tener entre 2 y 50 caracteres")
     private String puesto;
 
     @NotNull(message = "La fecha de contratación es obligatoria")

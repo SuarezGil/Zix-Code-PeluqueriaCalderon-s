@@ -1,14 +1,15 @@
 package org.zix.PeluqueriaCalderons.web.controller;
 
 import org.zix.PeluqueriaCalderons.dominio.dto.LoginRequest;
+import org.zix.PeluqueriaCalderons.dominio.dto.LoginResponseDto;
 import org.zix.PeluqueriaCalderons.dominio.dto.UsuarioDto;
 import org.zix.PeluqueriaCalderons.dominio.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.zix.PeluqueriaCalderons.persistence.entity.UsuarioEntity;
-
 import java.util.List;
 
 @RestController
@@ -20,17 +21,27 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Validated @RequestBody LoginRequest loginRequest) {
-        UsuarioDto usuario = usuarioService.autenticar(
-                loginRequest.getUsername(),
-                loginRequest.getPassword()
-        );
-        return ResponseEntity.ok(usuario);
+        try {
+            LoginResponseDto response = usuarioService.autenticar(
+                    loginRequest.getUsername(),
+                    loginRequest.getPassword()
+            );
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new org.zix.PeluqueriaCalderons.dominio.exception.Error("error_login", ex.getMessage()));
+        }
     }
 
     @PostMapping
     public ResponseEntity<?> crearUsuario(@Validated @RequestBody UsuarioDto usuarioDto) {
-        UsuarioDto usuarioCreado = usuarioService.crearUsuario(usuarioDto);
-        return ResponseEntity.ok(usuarioCreado);
+        try {
+            UsuarioDto usuarioCreado = usuarioService.crearUsuario(usuarioDto);
+            return ResponseEntity.ok(usuarioCreado);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest()
+                    .body(new org.zix.PeluqueriaCalderons.dominio.exception.Error("error_creacion", ex.getMessage()));
+        }
     }
 
     @GetMapping
@@ -65,8 +76,13 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarUsuario(@PathVariable Long id, @Validated @RequestBody UsuarioDto usuarioDto) {
-        UsuarioDto usuarioActualizado = usuarioService.actualizarUsuario(id, usuarioDto);
-        return ResponseEntity.ok(usuarioActualizado);
+        try {
+            UsuarioDto usuarioActualizado = usuarioService.actualizarUsuario(id, usuarioDto);
+            return ResponseEntity.ok(usuarioActualizado);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest()
+                    .body(new org.zix.PeluqueriaCalderons.dominio.exception.Error("error_actualizacion", ex.getMessage()));
+        }
     }
 
     @PatchMapping("/{id}/activar")
