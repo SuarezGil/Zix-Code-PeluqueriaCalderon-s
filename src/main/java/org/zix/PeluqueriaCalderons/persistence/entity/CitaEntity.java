@@ -20,11 +20,11 @@ public class CitaEntity {
     private LocalDateTime fechaHora;
 
     @ManyToOne
-    @JoinColumn(name = "codigo_cliente", nullable = false)
+    @JoinColumn(name = "codigo_cliente")
     private ClienteEntity cliente; // relación con ClienteEntity
 
     @ManyToOne
-    @JoinColumn(name = "codigo_servicio", nullable = false)
+    @JoinColumn(name = "codigo_servicio")
     private ServicioEntity servicio; // relación con ServicioEntity
 
 }

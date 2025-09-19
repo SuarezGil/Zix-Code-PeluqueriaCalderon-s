@@ -18,3 +18,12 @@ INSERT IGNORE INTO servicios (nombre, precio, duracion) VALUES
 INSERT IGNORE INTO citas (codigo_cliente, codigo_servicio, fecha_hora) VALUES
 (1, 1, '2025-09-18 14:30:00'),
 (2, 2, '2025-09-19 10:00:00');
+
+INSERT IGNORE INTO empleados (nombre, email, telefono, puesto, fecha_contratacion, activo) VALUES
+('Carlos Mendoza', 'carlos.mendoza@peluqueriacalderon.com', '5551-2345', 'Estilista', '2023-01-02', true),
+('Laura Hernandez', 'laura.hernandez@peluqueriacalderon.com', '5551-2346', 'Manicurista', '2023-01-03', true),
+('Mario Rodriguez', 'mario.rodriguez@peluqueriacalderon.com', '5551-2347', 'Barbero', '2023-01-04', true),
+('Ana Garcia', 'ana.garcia@peluqueriacalderon.com', '5551-2348', 'Colorista', '2023-01-05', true),
+('Jorge Lopez', 'jorge.lopez@peluqueriacalderon.com', '5551-2349', 'Estilista', '2023-01-06', false);
+
+
