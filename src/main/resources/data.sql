@@ -27,3 +27,22 @@ INSERT IGNORE INTO empleados (nombre, email, telefono, puesto, fecha_contratacio
 ('Jorge Lopez', 'jorge.lopez@peluqueriacalderon.com', '5551-2349', 'Estilista', '2023-01-06', false);
 
 
+INSERT IGNORE INTO inventario (nombre_producto, cantidad, precio_unitario, descripcion, categoria, minimo_stock) VALUES
+('Shampoo Profesional', 50, 15.99, 'Shampoo para cabello teñido', 'Cuidado Capilar', 10),
+('Acondicionador Reparador', 35, 18.50, 'Acondicionador intensivo', 'Cuidado Capilar', 8),
+('Tinte Rubio Oscuro', 25, 25.75, 'Tinte permanente rubio oscuro', 'Coloración', 5),
+('Tinte Negro', 30, 22.99, 'Tinte permanente negro azulado', 'Coloración', 6),
+('Gel Fijador', 40, 12.50, 'Gel de alta fijación', 'Estilización', 12),
+('Laca Professional', 28, 20.00, 'Laca de fijación extrema', 'Estilización', 7),
+('Crema para Peinar', 15, 16.75, 'Crema sin enjuague', 'Estilización', 5),
+('Mascarilla Capilar', 20, 30.00, 'Mascarilla nutritiva', 'Tratamiento', 4),
+('Aceite Argan', 18, 35.50, 'Aceite de argán puro', 'Tratamiento', 3),
+('Cepillo Profesional', 12, 45.00, 'Cepillo cerámico profesional', 'Herramientas', 5),
+('Tijeras de Corte', 8, 120.00, 'Tijeras profesionales de corte', 'Herramientas', 2),
+('Plancha Cerámica', 6, 85.00, 'Plancha de cerámica profesional', 'Herramientas', 2),
+('Espuma para Barba Premium', 45, 14.99, 'Espuma de afeitar de alta calidad', 'Barba', 15),
+('Aceite para Barba', 30, 28.00, 'Aceite nutritivo para barba y piel', 'Barba', 8),
+('Bálsamo para Barba', 25, 23.50, 'Bálsamo hidratante para barba', 'Barba', 6),
+('Loción After Shave', 38, 17.25, 'Loción refrescante post-afeitado', 'Barba', 10),
+('Navajas Desechables', 200, 2.50, 'Navajas profesionales desechables', 'Barbería', 50),
+('Cuchillas de Repuesto', 150, 3.25, 'Cuchillas para navajas de barbería', 'Barbería', 30);

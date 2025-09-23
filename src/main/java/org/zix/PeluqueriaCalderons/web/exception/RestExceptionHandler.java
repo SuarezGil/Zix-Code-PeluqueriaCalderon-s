@@ -113,6 +113,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
+    @ExceptionHandler(InventarioNoExisteException.class)
+    public ResponseEntity<Error> handleException(InventarioNoExisteException ex){
+        Error error = new Error("inventario_no_existe", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
 
 }
 
