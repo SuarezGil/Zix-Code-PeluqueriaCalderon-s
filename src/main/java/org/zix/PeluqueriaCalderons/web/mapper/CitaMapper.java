@@ -1,15 +1,19 @@
 package org.zix.PeluqueriaCalderons.web.mapper;
 
+import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.zix.PeluqueriaCalderons.persistence.entity.CitaEntity;
 import org.zix.PeluqueriaCalderons.dominio.dto.CitaDto;
 
-import org.mapstruct.Mapping;
-
 import java.util.List;
 
+@Mapper(componentModel = "spring")
 public interface CitaMapper {
-    @Mapping(source = "fecha_hora", target = "releaseDate")
-    public CitaDto toDto(CitaEntity entity);
-    public List<CitaDto> toDtos(Iterable<CitaEntity> entities);
+
+    CitaDto toDto(CitaEntity entity);
+
+    List<CitaDto> toDtos(Iterable<CitaEntity> entities);
+
+    CitaEntity toEntity(CitaDto citaDto);
+
 }

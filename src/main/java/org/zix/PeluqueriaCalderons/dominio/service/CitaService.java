@@ -1,11 +1,15 @@
 package org.zix.PeluqueriaCalderons.dominio.service;
 
+import org.springframework.stereotype.Service;
 import org.zix.PeluqueriaCalderons.dominio.dto.CitaDto;
 import org.zix.PeluqueriaCalderons.dominio.dto.ModCitaDto;
+import org.zix.PeluqueriaCalderons.dominio.exception.CitaYaExisteException;
 import org.zix.PeluqueriaCalderons.dominio.repository.CitaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+@Service
 public class CitaService {
     private final CitaRepository citaRepository;
 
@@ -22,10 +26,14 @@ public class CitaService {
         return this.citaRepository.buscarPorId(codigo);
     }
 
-    public CitaDto guardarCita(CitaDto citaDto){
-        return this.citaRepository.guardarCita(citaDto);
+    public CitaDto guardarCita(CitaDto citaDto) {
+        if (citaRepository.existsByClienteAndFechaHora(citaDto.cliente_id(), citaDto.fechaHora())) {
+            throw new CitaYaExisteException(citaDto.cliente_id(), citaDto.fechaHora());
+        }
 
+        return citaRepository.guardarCita(citaDto);
     }
+
 
     public CitaDto modificarCita(Long codigo, ModCitaDto citaDto){
         return this.citaRepository.modificarCita(codigo ,citaDto);
