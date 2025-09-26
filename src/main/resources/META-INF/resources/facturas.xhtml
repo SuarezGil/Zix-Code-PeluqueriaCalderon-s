@@ -4,6 +4,10 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
+<h:head>
+    <title>Gestión de Facturas</title>
+</h:head>
+
 <h:body>
     <h:form id="form-facturas">
         <div class="card">
@@ -11,38 +15,46 @@
 
             <p:menubar>
                 <p:menuitem value="Nueva factura" icon="pi pi-file"
-                            actionListener="#{facturasController.nuevaFactura}"
+                            actionListener="#{facturaBean.prepararNuevo}"
                             update=":form-modal:panelFactura"
                             oncomplete="PF('dlgFactura').show()" />
             </p:menubar>
 
-            <p:dataTable value="#{facturasController.listaFacturas}" var="f" id="tabla-facturas"
+            <p:dataTable value="#{facturaBean.facturas}" var="f" id="tabla-facturas"
                          paginator="true" rows="5" responsiveLayout="scroll">
 
                 <f:facet name="header">
                     <h3>Gestión de Facturas</h3>
                 </f:facet>
 
-                <p:column headerText="Número" sortBy="#{f.numero}">
-                    <h:outputText value="#{f.numero}" />
+                <p:column headerText="Código" sortBy="#{f.codigo}">
+                    <h:outputText value="#{f.codigo}" />
                 </p:column>
-                <p:column headerText="Cliente">
-                    <h:outputText value="#{f.cliente.nombre}" />
+
+                <p:column headerText="Cliente ID">
+                    <h:outputText value="#{f.cliente_id}" />
                 </p:column>
+
+                <p:column headerText="Empleado ID">
+                    <h:outputText value="#{f.empleado_id}" />
+                </p:column>
+
                 <p:column headerText="Fecha">
                     <h:outputText value="#{f.fecha}" />
                 </p:column>
+
                 <p:column headerText="Total">
                     <h:outputText value="#{f.total}" />
                 </p:column>
+
                 <p:column headerText="Acciones">
                     <p:commandButton value="Editar" icon="pi pi-pencil"
-                                     actionListener="#{facturasController.editarFactura(f)}"
+                                     actionListener="#{facturaBean.prepararEdicion(f)}"
                                      update=":form-modal:panelFactura"
                                      oncomplete="PF('dlgFactura').show()" />
                     <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
-                                     actionListener="#{facturasController.confirmarEliminar(f)}"
-                                     oncomplete="PF('dlgEliminarFactura').show()" />
+                                     action="#{facturaBean.eliminarFactura(f.codigo)}"
+                                     update=":form-facturas:tabla-facturas :form-facturas:msgFacturas" />
                 </p:column>
             </p:dataTable>
         </div>
@@ -52,40 +64,38 @@
     <h:form id="form-modal">
         <p:dialog header="Detalle de la Factura" widgetVar="dlgFactura" modal="true" responsive="true">
             <p:outputPanel id="panelFactura" class="ui-fluid">
+
                 <div class="field">
-                    <p:outputLabel for="cliente" value="Cliente:" />
-                    <p:inputText id="cliente" value="#{facturasController.facturaSeleccionada.cliente.nombre}" />
+                    <p:outputLabel for="cliente" value="Cliente ID:" />
+                    <p:inputText id="cliente" value="#{facturaBean.facturaActual.cliente_id}" />
                 </div>
+
+                <div class="field">
+                    <p:outputLabel for="empleado" value="Empleado ID:" />
+                    <p:inputText id="empleado" value="#{facturaBean.facturaActual.empleado_id}" />
+                </div>
+
                 <div class="field">
                     <p:outputLabel for="fecha" value="Fecha:" />
-                    <p:calendar id="fecha" value="#{facturasController.facturaSeleccionada.fecha}" pattern="dd/MM/yyyy"/>
+                    <p:calendar id="fecha" value="#{facturaBean.facturaActual.fecha}" pattern="dd/MM/yyyy"/>
                 </div>
+
                 <div class="field">
                     <p:outputLabel for="total" value="Total:" />
-                    <p:inputText id="total" value="#{facturasController.facturaSeleccionada.total}" />
+                    <p:inputText id="total" value="#{facturaBean.facturaActual.total}" />
                 </div>
+
             </p:outputPanel>
 
             <f:facet name="footer">
                 <p:commandButton value="Guardar" icon="pi pi-check"
-                                 actionListener="#{facturasController.guardarFactura}"
+                                 actionListener="#{facturaBean.guardarFactura}"
                                  update=":form-facturas:tabla-facturas :form-facturas:msgFacturas"
                                  oncomplete="PF('dlgFactura').hide()" />
                 <p:commandButton value="Cancelar" icon="pi pi-times"
                                  onclick="PF('dlgFactura').hide()" type="button" />
             </f:facet>
         </p:dialog>
-
-        <!-- Confirmación de eliminación -->
-        <p:confirmDialog widgetVar="dlgEliminarFactura" message="¿Eliminar esta factura?"
-                         header="Confirmación" severity="warn">
-            <p:commandButton value="Sí" icon="pi pi-check" class="ui-button-danger"
-                             actionListener="#{facturasController.eliminarFactura}"
-                             update=":form-facturas:tabla-facturas :form-facturas:msgFacturas"
-                             oncomplete="PF('dlgEliminarFactura').hide()" />
-            <p:commandButton value="No" icon="pi pi-times"
-                             onclick="PF('dlgEliminarFactura').hide()" type="button" />
-        </p:confirmDialog>
     </h:form>
 </h:body>
 </html>

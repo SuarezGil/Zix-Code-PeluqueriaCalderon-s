@@ -16,25 +16,31 @@
                             oncomplete="PF('dlgServicio').show()" />
             </p:menubar>
 
-            <p:dataTable value="#{ServicioController.listaServicios}" var="s" id="tabla-servicios"
-                         paginator="true" rows="5" responsiveLayout="scroll">
+            <p:dataTable value="#{servicioBean.servicios}" var="s" id="tabla-servicios"
+                         paginator="true" rows="5" responsiveLayout="scroll"
+                         rendered="#{not empty servicioBean.servicios}">
 
                 <f:facet name="header">
                     <h3>Gestión de Servicios</h3>
                 </f:facet>
 
-                <p:column headerText="Código" sortBy="#{s.codigo}">
+                <p:column headerText="Código">
                     <h:outputText value="#{s.codigo}" />
                 </p:column>
-                <p:column headerText="Nombre" filterBy="#{s.nombre}" sortBy="#{s.nombre}">
-                    <h:outputText value="#{s.nombre}" />
+
+
+                <p:column headerText="Service Name">
+                    <h:outputText value="#{s.name}" />
                 </p:column>
+
                 <p:column headerText="Precio">
-                    <h:outputText value="#{s.precio}" />
+                    <h:outputText value="#{s.price}" />
                 </p:column>
+
                 <p:column headerText="Duración (min)">
-                    <h:outputText value="#{s.duracion}" />
+                    <h:outputText value="#{s.duration}" />
                 </p:column>
+
                 <p:column headerText="Acciones">
                     <p:commandButton value="Editar" icon="pi pi-pencil"
                                      actionListener="#{ServicioController.editarServicio(s)}"
@@ -48,13 +54,13 @@
         </div>
     </h:form>
 
-    <!-- Modal Servicio -->
+
     <h:form id="form-modal">
         <p:dialog header="Detalle del Servicio" widgetVar="dlgServicio" modal="true" responsive="true">
             <p:outputPanel id="panelServicio" class="ui-fluid">
                 <div class="field">
                     <p:outputLabel for="nombre" value="Nombre:" />
-                    <p:inputText id="nombre" value="#{ServicioController.servicioSeleccionado.nombre}" />
+                    <p:inputText id="nombre" value="#{ServicioController.servicioSeleccionado.name}" />
                 </div>
                 <div class="field">
                     <p:outputLabel for="precio" value="Precio:" />
@@ -76,7 +82,7 @@
             </f:facet>
         </p:dialog>
 
-        <!-- Confirmación de eliminación -->
+
         <p:confirmDialog widgetVar="dlgEliminarServicio" message="¿Eliminar este servicio?"
                          header="Confirmación" severity="warn">
             <p:commandButton value="Sí" icon="pi pi-check" class="ui-button-danger"

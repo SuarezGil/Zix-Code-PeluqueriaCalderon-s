@@ -2,22 +2,17 @@ package org.zix.PeluqueriaCalderons.dominio.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 
-import java.time.LocalDate;
-
 public record ServicioDto (
-        @NotBlank(message = "El nombre del servicio es obligatorio")
+        @NotBlank(message = "The name of the service is required")
         String name,
-        @NotNull(message = "El precio es obligatorio")
+
+        @NotNull(message = "Price is required")
+        @Positive(message = "Price must be greater than 0")
         Double price,
 
-        @NotNull(message = "La duración es obligatoria")
-        @Positive(message = "La duración debe ser mayor que 0")
-         Integer duration
-
-
-)
-{
-}
+        @NotNull(message = "Duration is required")
+        @Positive(message = "Duration must be greater than 0")
+        Integer duration
+) {}
