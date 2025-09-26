@@ -101,19 +101,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
-    @ExceptionHandler(CitaYaExisteException.class)
-    public ResponseEntity<Error> handleCitaYaExisteException(CitaYaExisteException ex, WebRequest request) {
-        Error error = new Error("cita_ya_existe", ex.getMessage());
-        return ResponseEntity.badRequest().body(error);
-    }
-
-    @ExceptionHandler(CitaNoExisteException.class)
-    public ResponseEntity<Error> handleCitaNoExisteException(CitaNoExisteException ex, WebRequest request) {
-        Error error = new Error("cita_no_existe", ex.getMessage());
-        return ResponseEntity.badRequest().body(error);
-    }
-
-
 }
 
 
