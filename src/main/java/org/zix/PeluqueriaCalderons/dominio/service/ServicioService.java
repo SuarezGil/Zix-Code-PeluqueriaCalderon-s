@@ -19,19 +19,19 @@ public class ServicioService {
         return this.servicioRepository.obtenerTodo();
     }
 
-    public ServicioDto obtenerServicioPorCodigo(Long codigo){
-        return this.servicioRepository.obtenerServicioPorCodigo(codigo);
+    public ServicioDto obtenerServicioPorCodigo(Long codigoServicio){
+        return this.servicioRepository.obtenerServicioPorCodigo(codigoServicio);
     }
 
     public ServicioDto guardarServicio(ServicioDto  servicioDto){
         return this.servicioRepository.guardarServicio(servicioDto);
     }
 
-    public ServicioDto modificarServicio(Long codigo, ModServicioDto  modServicioDto){
-         return this.servicioRepository.modificarServicio(codigo, modServicioDto);
+    public ServicioDto modificarServicio(Long codigoServicio, ModServicioDto  modServicioDto){
+         return this.servicioRepository.modificarServicio(codigoServicio, modServicioDto);
     }
 
-    public void eliminarServicio(Long codigo){
-        this.servicioRepository.eliminarServicio(codigo);
+    public void eliminarServicio(Long codigoServicio){
+        this.servicioRepository.eliminarServicio(codigoServicio);
     }
 }

@@ -28,6 +28,10 @@ public class UsuarioEntity {
     @Column(nullable = false, length = 20)
     private Rol rol;
 
+    @OneToOne
+    @JoinColumn(name = "empleado_id", referencedColumnName = "id")
+    private EmpleadoEntity empleado;
+
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
 

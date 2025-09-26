@@ -21,19 +21,20 @@ public class ClienteService {
         return this.clienteRepository.obtenerTodo();
     }
 
-    public ClienteDto obtenerClientePorCodigo(Long codigo){
-        return this.clienteRepository.obtenerClientePorCodigo(codigo);
+    public ClienteDto obtenerClientePorCodigo(Long codigoCliente){
+        return this.clienteRepository.obtenerClientePorCodigo(codigoCliente);
     }
 
     public ClienteDto guardarCliente(ClienteDto clienteDto){
         return this.clienteRepository.guardarCliente(clienteDto);
     }
 
-    public ClienteDto modificarCliente(Long codigo, ModClienteDto modClienteDto){
-    return this.clienteRepository.modificarCliente(codigo, modClienteDto);
+    public ClienteDto modificarCliente(Long codigoCliente, ModClienteDto modClienteDto){
+    return this.clienteRepository.modificarCliente(codigoCliente, modClienteDto);
     }
 
-    public void eliminarCliente(Long codigo){
-        this.clienteRepository.eliminarCliente(codigo);
+    public void eliminarCliente(Long codigoCliente){
+
+        this.clienteRepository.eliminarCliente(codigoCliente);
     }
 }

@@ -3,6 +3,7 @@ package org.zix.PeluqueriaCalderons.web.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -25,52 +26,94 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    //4
+    // Obtener todos los clientes
     @GetMapping
+    @Operation(
+            summary = "Obtener todos los clientes",
+            description = "Devuelve la lista completa de clientes registrados",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Listado de clientes obtenido con éxito",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ClienteDto.class)))
+            }
+    )
     public ResponseEntity<List<ClienteDto>> obtenerTodo() {
         return ResponseEntity.ok(this.clienteService.obtenerTodo());
     }
 
-    @GetMapping("{codigo}")
-    @Operation(summary = "Obtener un cliente a partir de su identificador",
+    // Obtener cliente por código
+    @GetMapping("{codigoCliente}")
+    @Operation(
+            summary = "Obtener un cliente por su identificador",
             description = "Retorna al cliente que coincida con el identificador enviado",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Cliente fue encontrado con éxito"),
+                    @ApiResponse(responseCode = "200", description = "Cliente encontrado con éxito",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ClienteDto.class))),
                     @ApiResponse(responseCode = "404", description = "Cliente no encontrado", content = @Content)
-            })
+            }
+    )
     public ResponseEntity<ClienteDto> obtenerClientePorCodigo(
             @Parameter(description = "Identificador del cliente a recuperar", example = "1")
-            @PathVariable Long codigo) {
-        return ResponseEntity.ok(this.clienteService.obtenerClientePorCodigo(codigo));
+            @PathVariable Long codigoCliente) {
+        return ResponseEntity.ok(this.clienteService.obtenerClientePorCodigo(codigoCliente));
     }
 
-    //guardar cliente
+    // Guardar nuevo cliente
     @PostMapping
-    public ResponseEntity<ClienteDto> guardarCliente(@Valid  @RequestBody ClienteDto clienteDto) {
+    @Operation(
+            summary = "Registrar un nuevo cliente",
+            description = "Crea y guarda un nuevo cliente en el sistema",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Cliente creado con éxito",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ClienteDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Datos inválidos en la petición", content = @Content),
+                    @ApiResponse(responseCode = "409", description = "El cliente ya existe", content = @Content)
+            }
+    )
+    public ResponseEntity<ClienteDto> guardarCliente(
+            @Valid @RequestBody
+            @Parameter(description = "Datos del cliente a registrar") ClienteDto clienteDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.clienteService.guardarCliente(clienteDto));
     }
 
-    //modificar cliente
-    @PutMapping("{codigo}")
+    // Modificar cliente existente
+    @PutMapping("{codigoCliente}")
+    @Operation(
+            summary = "Modificar un cliente existente",
+            description = "Actualiza los datos de un cliente a partir de su identificador",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Cliente actualizado con éxito",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ClienteDto.class))),
+                    @ApiResponse(responseCode = "404", description = "Cliente no encontrado", content = @Content),
+                    @ApiResponse(responseCode = "400", description = "Datos inválidos en la petición", content = @Content)
+            }
+    )
     public ResponseEntity<ClienteDto> modificarCliente(
-            @PathVariable Long codigo,
-            @RequestBody @Valid ModClienteDto modClienteDto) {
-        ClienteDto clienteActualizado = this.clienteService.modificarCliente(codigo, modClienteDto);
+            @Parameter(description = "Identificador del cliente a modificar", example = "1")
+            @PathVariable Long codigoCliente,
+            @Valid @RequestBody
+            @Parameter(description = "Nuevos datos para el cliente") ModClienteDto modClienteDto) {
+        ClienteDto clienteActualizado = this.clienteService.modificarCliente(codigoCliente, modClienteDto);
         return ResponseEntity.ok(clienteActualizado);
     }
 
-    //eliminar cliente
-    @DeleteMapping("{codigo}")
-    public ResponseEntity<Void> eliminarCliente(@PathVariable Long codigo) {
-        this.clienteService.eliminarCliente(codigo);
+    // Eliminar cliente
+    @DeleteMapping("{codigoCliente}")
+    @Operation(
+            summary = "Eliminar un cliente",
+            description = "Elimina el cliente que coincida con el identificador enviado",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Cliente eliminado con éxito"),
+                    @ApiResponse(responseCode = "404", description = "Cliente no encontrado", content = @Content)
+            }
+    )
+    public ResponseEntity<Void> eliminarCliente(
+            @Parameter(description = "Identificador del cliente a eliminar", example = "1")
+            @PathVariable Long codigoCliente) {
+        this.clienteService.eliminarCliente(codigoCliente);
         return ResponseEntity.noContent().build();
     }
-
-    //exception - clienteNoExiste - ClienteYaExiste
-
-    //Consulta a la IA
-
-    //Validaciones (dependencias)
-
-    //Documentación (dependencias)
 }

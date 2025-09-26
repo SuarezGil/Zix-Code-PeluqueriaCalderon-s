@@ -30,8 +30,8 @@ import java.util.List;
     }
 
     @Override
-    public ClienteDto obtenerClientePorCodigo(Long codigo) {
-        ClienteEntity cliente = this.crudCliente.findById(codigo).orElseThrow(()-> new ClienteNoExisteException(codigo));
+    public ClienteDto obtenerClientePorCodigo(Long codigoCliente) {
+        ClienteEntity cliente = this.crudCliente.findById(codigoCliente).orElseThrow(()-> new ClienteNoExisteException(codigoCliente));
         return this.clienteMapper.toDto(cliente);
     }
 
@@ -48,14 +48,14 @@ import java.util.List;
     }
 
     @Override
-    public ClienteDto modificarCliente(Long codigo, ModClienteDto modClienteDto) {
-        ClienteEntity cliente = this.crudCliente.findById(codigo).orElse(null);
+    public ClienteDto modificarCliente(Long codigoCliente, ModClienteDto modClienteDto) {
+        ClienteEntity cliente = this.crudCliente.findById(codigoCliente).orElse(null);
 //        pelicula.setNombre(modPeliculaDto.name());
 //        pelicula.setFechaEstreno(modPeliculaDto.releaseDate());
 //        pelicula.setCalificacion(BigDecimal.valueOf(modPeliculaDto.rating()));
 //        this.crudPelicula.save(pelicula);
 //        return this.peliculaMapper.toDto(pelicula);
-        if (cliente == null) {throw new ClienteNoExisteException(codigo);
+        if (cliente == null) {throw new ClienteNoExisteException(codigoCliente);
         }
         else{
             this.clienteMapper.modificarEntityFromDto(modClienteDto, cliente);
@@ -63,11 +63,11 @@ import java.util.List;
         }    }
 
     @Override
-    public void eliminarCliente(Long codigo) {
-    ClienteEntity clienteEntity = this.crudCliente.findById(codigo).orElse(null);
-    if (clienteEntity == null) {throw new ClienteNoExisteException(codigo);
+    public void eliminarCliente(Long codigoCliente) {
+    ClienteEntity clienteEntity = this.crudCliente.findById(codigoCliente).orElse(null);
+    if (clienteEntity == null) {throw new ClienteNoExisteException(codigoCliente);
     }else {
-        this.crudCliente.deleteById(codigo);
+        this.crudCliente.deleteById(codigoCliente);
     }
     }
 }

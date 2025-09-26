@@ -12,7 +12,8 @@ import java.time.LocalDate;
 public class  ClienteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long codigo;
+    @Column(name = "codigo_cliente")
+    private Long codigoCliente;
     @Column(length = 150, unique = true, nullable = false)
     private String nombre;
     @Column(precision = 3, nullable = false)
