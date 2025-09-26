@@ -1,11 +1,13 @@
 package org.zix.PeluqueriaCalderons.dominio.service;
 
+import org.springframework.stereotype.Service;
 import org.zix.PeluqueriaCalderons.dominio.dto.FacturaDto;
 import org.zix.PeluqueriaCalderons.dominio.dto.ModFacturaDto;
 import org.zix.PeluqueriaCalderons.dominio.repository.FacturaRepository;
 
 import java.util.List;
 
+@Service
 public class FacturaService {
     private final FacturaRepository facuturaRepository;
 

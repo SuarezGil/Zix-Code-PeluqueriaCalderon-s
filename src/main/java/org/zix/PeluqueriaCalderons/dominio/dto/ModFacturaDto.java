@@ -6,6 +6,5 @@ public record ModFacturaDto (
         LocalDate fecha,
         Double total,
         Long cliente_id,
-        Long servicio_id
-){
+        Long empleado_id) {
 }

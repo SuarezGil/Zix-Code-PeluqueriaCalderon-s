@@ -1,4 +1,3 @@
-
 package org.zix.PeluqueriaCalderons.dominio.dto;
 
 import jakarta.validation.constraints.NotNull;
