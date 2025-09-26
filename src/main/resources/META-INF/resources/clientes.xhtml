@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Gestión de Clientes</title>
+</h:head>
+<h:body>
+    <h:form id="formClientes">
+
+        <h2>Gestión de Clientes</h2>
+
+        <p:panelGrid columns="2" columnClasses="label,value">
+
+            <h:outputLabel for="buscarId" value="Buscar por ID:"/>
+            <p:inputText id="buscarId" value="#{clienteBean.textoBusqueda}" />
+
+            <p:commandButton value="Buscar"
+                             action="#{clienteBean.buscarClientePorId()}"
+                             update="tablaClientes, msgs"
+                             process="@this, buscarId" />
+
+            <p:commandButton value="Mostrar Todos" action="#{clienteBean.cargarClientes()}" update="tablaClientes" />
+
+        </p:panelGrid>
+
+        <p:separator />
+        <p:messages id="msgs" showDetail="true" closable="true" />
+
+        <p:dataTable id="tablaClientes" var="c"
+                     value="#{clienteBean.clientes}"
+                     selection="#{clienteBean.clienteSeleccionado}"
+                     rowKey="#{c.codigoCliente}"
+                     selectionMode="single"
+                     paginator="true" rows="10">
+
+            <p:column headerText="Código">
+                <h:outputText value="#{c.codigoCliente}" />
+            </p:column>
+            <p:column headerText="Nombre">
+                <h:outputText value="#{c.name}" />
+            </p:column>
+            <p:column headerText="Teléfono">
+                <h:outputText value="#{c.tel}" />
+            </p:column>
+            <p:column headerText="Email">
+                <h:outputText value="#{c.email}" />
+            </p:column>
+            <p:column headerText="Fecha Registro">
+                <h:outputText value="#{c.registrationDate}" />
+            </p:column>
+
+            <p:column headerText="Acciones" style="width:150px; text-align: center;">
+
+                <p:commandButton value="Editar"
+                                 icon="pi pi-pencil"
+                                 update=":formEdicion:editPanel"
+                                 oncomplete="PF('dialogoEdicion').show()"
+                                 styleClass="ui-button-warning">
+                    <f:setPropertyActionListener value="#{c}"
+                                                 target="#{clienteBean.clienteSeleccionado}" />
+                </p:commandButton>
+
+                <p:commandButton value="Eliminar"
+                                 icon="pi pi-trash"
+                                 action="#{clienteBean.eliminarCliente()}"
+                                 update="tablaClientes, msgs"
+                                 styleClass="ui-button-danger"
+                                 style="margin-left: 5px;">
+                    <f:setPropertyActionListener value="#{c}"
+                                                 target="#{clienteBean.clienteSeleccionado}" />
+                    <p:confirm header="Confirmación"
+                               message="¿Está seguro de que desea eliminar el cliente #{c.name}?"
+                               icon="pi pi-exclamation-triangle"/>
+                </p:commandButton>
+            </p:column>
+
+        </p:dataTable>
+
+        <p:separator />
+
+        <h3>Agregar Nuevo Cliente</h3>
+        <p:panelGrid columns="2" columnClasses="label,value">
+
+            <h:outputLabel for="nombre" value="Nombre:" />
+            <p:inputText id="nombre" value="#{clienteBean.clienteNuevo.name}" required="true" />
+
+            <h:outputLabel for="tel" value="Teléfono:" />
+            <p:inputText id="tel" value="#{clienteBean.clienteNuevo.tel}" required="true" />
+
+            <h:outputLabel for="email" value="Email:" />
+            <p:inputText id="email" value="#{clienteBean.clienteNuevo.email}" required="true" />
+
+            <h:outputLabel for="fecha" value="Fecha Registro:" />
+            <p:calendar id="fecha" value="#{clienteBean.clienteNuevo.registrationDate}" pattern="yyyy-MM-dd" />
+
+        </p:panelGrid>
+
+        <p:commandButton value="Guardar Cliente" action="#{clienteBean.guardarCliente()}"
+                         update="tablaClientes, msgs, :formClientes:nombre, :formClientes:tel, :formClientes:email, :formClientes:fecha" />
+
+        <p:separator />
+    </h:form>
+
+    <h:form id="formEdicion">
+        <p:dialog header="Editar Cliente" widgetVar="dialogoEdicion" modal="true" resizable="false">
+
+            <p:panelGrid columns="2" columnClasses="label,value" id="editPanel"
+                         rendered="#{clienteBean.clienteSeleccionado != null}">
+
+                <h:outputLabel for="editNombre" value="Nombre:"/>
+                <p:inputText id="editNombre" value="#{clienteBean.clienteSeleccionado.name}" required="true" />
+
+                <h:outputLabel for="editTel" value="Teléfono:"/>
+                <p:inputText id="editTel" value="#{clienteBean.clienteSeleccionado.tel}" required="true" />
+
+                <h:outputLabel for="editEmail" value="Email:"/>
+                <p:inputText id="editEmail" value="#{clienteBean.clienteSeleccionado.email}" required="true" />
+
+                <h:outputLabel for="editFecha" value="Fecha Registro:"/>
+                <p:calendar id="editFecha" value="#{clienteBean.clienteSeleccionado.registrationDate}" pattern="yyyy-MM-dd" />
+
+            </p:panelGrid>
+
+            <p:commandButton value="Guardar Cambios" action="#{clienteBean.modificarCliente()}"
+                             process="editPanel"
+                             update=":formClientes:tablaClientes, :formClientes:msgs"
+                             oncomplete="PF('dialogoEdicion').hide()"
+                             style="margin-top: 10px;"/>
+
+        </p:dialog>
+    </h:form>
+
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" width="300">
+        <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+    </p:confirmDialog>
+</h:body>
+</html>
