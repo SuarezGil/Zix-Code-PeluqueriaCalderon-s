@@ -17,6 +17,7 @@ public interface ClienteMapper {
         // Firmas de metodos
 
         // toDto:(convertir a DTO)
+        @Mapping(source = "codigoCliente", target = "codigoCliente")
         @Mapping(source = "nombre", target = "name")
         @Mapping(source = "telefono", target = "tel")
         @Mapping(source = "correo", target = "email")

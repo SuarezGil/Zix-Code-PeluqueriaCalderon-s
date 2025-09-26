@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Gestión de Citas - Peluquería Calderón</title>
+    <style>
+        .panel-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            padding: 15px;
+        }
+        .action-buttons {
+            margin: 5px;
+        }
+    </style>
+</h:head>
+
+<h:body style="background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+    <div style="width: 95%; margin: 20px auto;">
+
+        <p:growl id="messages" showDetail="true" life="4000" sticky="false"/>
+
+        <p:panel header="Gestión de Citas" styleClass="panel-header">
+
+            <!-- Tabla de Citas -->
+            <p:dataTable id="citasTable"
+                         value="#{citaBean.citas}"
+                         var="cita"
+                         paginator="true"
+                         rows="10"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,20"
+                         emptyMessage="No se encontraron citas registradas"
+                         style="width: 100%; margin-bottom: 20px;"
+                         rowIndexVar="rowIndex">
+
+                <p:column headerText="#" width="50">
+                    <h:outputText value="#{rowIndex + 1}" />
+                </p:column>
+
+                <p:column headerText="ID" width="80" sortBy="#{cita.id}">
+                    <h:outputText value="#{cita.id}" />
+                </p:column>
+
+                <p:column headerText="Fecha y Hora" width="200" sortBy="#{cita.dateTime}">
+                    <h:outputText value="#{cita.dateTime}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/Mexico_City"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Cliente ID" width="120" sortBy="#{cita.clienteId}">
+                    <h:outputText value="#{cita.clienteId}" />
+                </p:column>
+
+                <p:column headerText="Servicio ID" width="120" sortBy="#{cita.servicioId}">
+                    <h:outputText value="#{cita.servicioId}" />
+                </p:column>
+
+                <p:column headerText="Acciones" width="200" style="text-align: center;">
+                    <p:commandButton icon="pi pi-pencil"
+                                     title="Editar"
+                                     styleClass="ui-button-success action-buttons"
+                                     oncomplete="PF('citaDialog').show()"
+                                     update=":citaForm:dialogContent"
+                                     actionListener="#{citaBean.prepararEdicion(cita)}">
+                    </p:commandButton>
+
+                    <p:commandButton icon="pi pi-trash"
+                                     title="Eliminar"
+                                     styleClass="ui-button-danger action-buttons"
+                                     actionListener="#{citaBean.eliminarCita(cita.id)}"
+                                     update="citasTable, messages">
+                        <p:confirm header="Confirmar Eliminación"
+                                   message="¿Está seguro de eliminar esta cita?"
+                                   icon="pi pi-exclamation-triangle" />
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Sí" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+            </p:confirmDialog>
+
+            <!-- Botón para nueva cita -->
+            <p:commandButton value="Nueva Cita"
+                             icon="pi pi-plus"
+                             style="margin-top: 10px;"
+                             oncomplete="PF('citaDialog').show()"
+                             update=":citaForm:dialogContent"
+                             actionListener="#{citaBean.prepararNuevo()}"/>
+
+            <!-- Botón para recargar -->
+            <p:commandButton value="Recargar Lista"
+                             icon="pi pi-refresh"
+                             style="margin-top: 10px; margin-left: 10px;"
+                             actionListener="#{citaBean.cargarCitas()}"
+                             update="citasTable, messages"/>
+
+        </p:panel>
+
+    </div>
+
+    <!-- Diálogo para agregar/editar citas -->
+    <h:form id="citaForm">
+        <p:dialog header="Cita"
+                  widgetVar="citaDialog"
+                  modal="true"
+                  resizable="false"
+                  draggable="false"
+                  width="500"
+                  height="auto">
+
+            <h:panelGrid id="dialogContent" columns="2" cellpadding="10" style="width: 100%;">
+
+                <p:outputLabel for="fechaHora" value="Fecha y Hora: *" />
+                <p:calendar id="fechaHora"
+                            value="#{citaBean.citaActual.dateTime}"
+                            pattern="dd/MM/yyyy HH:mm"
+                            timeOnly="false"
+                            showTime="true"
+                            locale="es"
+                            required="true"
+                            requiredMessage="La fecha y hora son requeridas"
+                            style="width: 100%;">
+                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                </p:calendar>
+
+                <p:outputLabel for="clienteId" value="ID Cliente: *" />
+                <p:inputNumber id="clienteId"
+                               value="#{citaBean.citaActual.clienteId}"
+                               required="true"
+                               requiredMessage="El ID del cliente es requerido"
+                               minValue="1"
+                               style="width: 100%;"/>
+
+                <p:outputLabel for="servicioId" value="ID Servicio: *" />
+                <p:inputNumber id="servicioId"
+                               value="#{citaBean.citaActual.servicioId}"
+                               required="true"
+                               requiredMessage="El ID del servicio es requerido"
+                               minValue="1"
+                               style="width: 100%;"/>
+
+            </h:panelGrid>
+
+            <f:facet name="footer">
+                <p:commandButton value="Guardar"
+                                 icon="pi pi-check"
+                                 actionListener="#{citaBean.guardarCita()}"
+                                 update="citasTable, messages"
+                                 oncomplete="if(!args.validationFailed) PF('citaDialog').hide();"
+                                 process="@form"/>
+
+                <p:commandButton value="Cancelar"
+                                 icon="pi pi-times"
+                                 onclick="PF('citaDialog').hide()"
+                                 type="button"
+                                 styleClass="ui-button-secondary"/>
+            </f:facet>
+
+        </p:dialog>
+    </h:form>
+
+</h:body>
+</html>

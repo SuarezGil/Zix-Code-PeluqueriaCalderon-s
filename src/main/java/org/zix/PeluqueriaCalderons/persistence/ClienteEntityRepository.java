@@ -1,5 +1,6 @@
 package org.zix.PeluqueriaCalderons.persistence;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import org.zix.PeluqueriaCalderons.dominio.dto.ClienteDto;
 import org.zix.PeluqueriaCalderons.dominio.dto.ModClienteDto;
@@ -13,7 +14,7 @@ import org.zix.PeluqueriaCalderons.web.mapper.ClienteMapper;
 import java.util.List;
 
 @Repository
-    public class ClienteEntityRepository implements ClienteRepository {
+public class ClienteEntityRepository implements ClienteRepository {
 
     private final CrudClienteEntity crudCliente;
     private final ClienteMapper clienteMapper;
@@ -25,49 +26,50 @@ import java.util.List;
 
     @Override
     public List<ClienteDto> obtenerTodo() {
-
-        return this.clienteMapper.toDto(this.crudCliente.findAll());
+        List<ClienteEntity> entities = (List<ClienteEntity>) this.crudCliente.findAll();
+        return this.clienteMapper.toDto(entities);
     }
 
     @Override
     public ClienteDto obtenerClientePorCodigo(Long codigoCliente) {
-        ClienteEntity cliente = this.crudCliente.findById(codigoCliente).orElseThrow(()-> new ClienteNoExisteException(codigoCliente));
+        ClienteEntity cliente = this.crudCliente.findById(codigoCliente)
+                .orElseThrow(() -> new ClienteNoExisteException(codigoCliente));
         return this.clienteMapper.toDto(cliente);
     }
 
     @Override
     public ClienteDto guardarCliente(ClienteDto clienteDto) {
-        ClienteEntity cliente = this.clienteMapper.toEntity(clienteDto);
-        if (this.crudCliente.findFirstByCorreo(clienteDto.email())!=null){
-            throw new ClienteYaExisteException(clienteDto.email());
+        // Verificar si ya existe un cliente con el mismo correo
+        ClienteEntity clienteExistente = this.crudCliente.findFirstByCorreo(clienteDto.getEmail());
+        if (clienteExistente != null) {
+            throw new ClienteYaExisteException(clienteDto.getEmail());
         }
-        //guardar en la DB con JPA
-        this.crudCliente.save(cliente);
-        //Retornar el valor guardado como DTO
-        return this.clienteMapper.toDto(cliente);
+
+        ClienteEntity cliente = this.clienteMapper.toEntity(clienteDto);
+        ClienteEntity clienteGuardado = this.crudCliente.save(cliente);
+        return this.clienteMapper.toDto(clienteGuardado);
     }
 
     @Override
     public ClienteDto modificarCliente(Long codigoCliente, ModClienteDto modClienteDto) {
-        ClienteEntity cliente = this.crudCliente.findById(codigoCliente).orElse(null);
-//        pelicula.setNombre(modPeliculaDto.name());
-//        pelicula.setFechaEstreno(modPeliculaDto.releaseDate());
-//        pelicula.setCalificacion(BigDecimal.valueOf(modPeliculaDto.rating()));
-//        this.crudPelicula.save(pelicula);
-//        return this.peliculaMapper.toDto(pelicula);
-        if (cliente == null) {throw new ClienteNoExisteException(codigoCliente);
-        }
-        else{
-            this.clienteMapper.modificarEntityFromDto(modClienteDto, cliente);
-            return this.clienteMapper.toDto(this.crudCliente.save(cliente));
-        }    }
+        ClienteEntity cliente = this.crudCliente.findById(codigoCliente)
+                .orElseThrow(() -> new ClienteNoExisteException(codigoCliente));
+
+        this.clienteMapper.modificarEntityFromDto(modClienteDto, cliente);
+        ClienteEntity clienteActualizado = this.crudCliente.save(cliente);
+        return this.clienteMapper.toDto(clienteActualizado);
+    }
 
     @Override
     public void eliminarCliente(Long codigoCliente) {
-    ClienteEntity clienteEntity = this.crudCliente.findById(codigoCliente).orElse(null);
-    if (clienteEntity == null) {throw new ClienteNoExisteException(codigoCliente);
-    }else {
-        this.crudCliente.deleteById(codigoCliente);
-    }
+        if (!this.crudCliente.existsById(codigoCliente)) {
+            throw new ClienteNoExisteException(codigoCliente);
+        }
+
+        try {
+            this.crudCliente.deleteById(codigoCliente);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("No se puede eliminar el cliente porque tiene citas asociadas.");
+        }
     }
 }

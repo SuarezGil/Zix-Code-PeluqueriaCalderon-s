@@ -20,4 +20,5 @@ public record ModClienteDto (
         LocalDate registrationDate
 
 ){
+
 }

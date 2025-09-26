@@ -1,17 +1,37 @@
 package org.zix.PeluqueriaCalderons.dominio.dto;
 
-import jakarta.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+public class ModCitaDto implements Serializable {
+    private Date dateTime;
+    private Long clienteId;
+    private Long servicioId;
 
-public record ModCitaDto (
-        @NotNull(message = "La fecha y hora es obligatoria")
-        LocalDateTime dateTime,
+    public ModCitaDto() {}
 
-        @NotNull(message = "El cliente es obligatorio")
-        Long clienteId,  // FK al cliente
+    // Getters y setters (no métodos con paréntesis vacíos)
+    public Date getDateTime() {
+        return dateTime;
+    }
 
-        @NotNull(message = "El servicio es obligatorio")
-        Long servicioId  // FK al servicio
-) { }
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public Long getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public Long getServicioId() {
+        return servicioId;
+    }
+
+    public void setServicioId(Long servicioId) {
+        this.servicioId = servicioId;
+    }
+}

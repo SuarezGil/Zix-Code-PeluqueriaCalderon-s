@@ -2,21 +2,43 @@ package org.zix.PeluqueriaCalderons.dominio.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
-
 import java.time.LocalDate;
 
-public record ClienteDto (
-        @NotBlank(message = "El nombre del cliente es obligatorio")
-        String name,
-        @NotBlank(message = "El telefono del cliente es obligatorio")
-        String tel,
+public class ClienteDto {
 
-        @NotBlank(message = "El correo del cliente es obligatorio")
-        String email,
+    private Long codigoCliente;
 
-        @PastOrPresent(message = "La fecha de registro debe ser anterior a la fecha actual")
-        LocalDate registrationDate
+    @NotBlank(message = "El nombre del cliente es obligatorio")
+    private String name;
 
-)
-{
+    @NotBlank(message = "El telefono del cliente es obligatorio")
+    private String tel;
+
+    @NotBlank(message = "El correo del cliente es obligatorio")
+    private String email;
+
+    @PastOrPresent(message = "La fecha de registro debe ser anterior a la fecha actual")
+    private LocalDate registrationDate;
+
+    public ClienteDto(Long codigoCliente, String name, String tel, String email, LocalDate registrationDate) {
+        this.codigoCliente = codigoCliente;
+        this.name = name;
+        this.tel = tel;
+        this.email = email;
+        this.registrationDate = registrationDate;
+    }
+
+    // Getters
+    public Long getCodigoCliente() { return codigoCliente; }
+    public String getName() { return name; }
+    public String getTel() { return tel; }
+    public String getEmail() { return email; }
+    public LocalDate getRegistrationDate() { return registrationDate; }
+
+    // Setters
+    public void setCodigoCliente(Long codigoCliente) { this.codigoCliente = codigoCliente; }
+    public void setName(String name) { this.name = name; }
+    public void setTel(String tel) { this.tel = tel; }
+    public void setEmail(String email) { this.email = email; }
+    public void setRegistrationDate(LocalDate registrationDate) { this.registrationDate = registrationDate; }
 }

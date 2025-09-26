@@ -11,7 +11,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.zix.PeluqueriaCalderons.dominio.exception.Error;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,17 +62,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ClienteYaExisteException.class)
-    public  ResponseEntity<Error> handleException(ClienteYaExisteException ex){
+    public ResponseEntity<Error> handleException(ClienteYaExisteException ex) {
         Error error = new Error("cliente_ya_existe", ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
     @ExceptionHandler(ClienteNoExisteException.class)
-    public  ResponseEntity<Error> handleException(ClienteNoExisteException ex){
+    public ResponseEntity<Error> handleException(ClienteNoExisteException ex) {
         Error error = new Error("cliente_no_existe", ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
+    // ✅ Nueva implementación con formato uniforme
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -82,40 +82,52 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest request) {
 
         List<Error> errores = new ArrayList<>();
+
         ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
-            errores.add(new Error(fieldError.getField(), fieldError.getDefaultMessage()));
+            errores.add(new Error(
+                    HttpStatus.BAD_REQUEST.value(),
+                    "Error de validación",
+                    fieldError.getDefaultMessage(), // mensaje definido en el DTO
+                    fieldError.getField()           // nombre del campo con error
+            ));
         });
 
         return ResponseEntity.badRequest().body(errores);
     }
 
     @ExceptionHandler(ServicioYaExisteException.class)
-    public  ResponseEntity<Error> handleException(ServicioYaExisteException ex){
+    public ResponseEntity<Error> handleException(ServicioYaExisteException ex) {
         Error error = new Error("servicio_ya_existe", ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
     @ExceptionHandler(ServicioNoExisteException.class)
-    public  ResponseEntity<Error> handleException(ServicioNoExisteException ex){
+    public ResponseEntity<Error> handleException(ServicioNoExisteException ex) {
         Error error = new Error("servicio_no_existe", ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
     @ExceptionHandler(CitaNoExisteException.class)
-    public  ResponseEntity<Error> handleException(CitaNoExisteException ex){
+    public ResponseEntity<Error> handleException(CitaNoExisteException ex) {
         Error error = new Error("cita_no_existe", ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
     @ExceptionHandler(CitaYaExisteException.class)
-    public  ResponseEntity<Error> handleException(CitaYaExisteException ex){
+    public ResponseEntity<Error> handleException(CitaYaExisteException ex) {
         Error error = new Error("cita_ya_existe", ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
+    @ExceptionHandler(FacturaNoExisteException.class)
+    public ResponseEntity<Error> handleException(FacturaNoExisteException ex) {
+        Error error = new Error("factura_no_existe", ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
 
+    @ExceptionHandler(FacturaYaExisteException.class)
+    public ResponseEntity<Error> handleException(FacturaYaExisteException ex) {
+        Error error = new Error("factura_ya_existe", ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
 }
-
-
-
-

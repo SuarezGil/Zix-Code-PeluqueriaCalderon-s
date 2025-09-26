@@ -17,7 +17,7 @@ import org.zix.PeluqueriaCalderons.dominio.service.CitaService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/citas/v1")
+@RequestMapping("/citas")
 @Tag(name = "Citas", description = "Operaciones (CRUD) sobre las citas de PeluqueriaCalderons")
 public class CitaController {
 
