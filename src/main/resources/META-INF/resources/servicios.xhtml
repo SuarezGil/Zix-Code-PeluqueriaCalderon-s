@@ -11,12 +11,12 @@
 
             <p:menubar>
                 <p:menuitem value="Nuevo servicio" icon="pi pi-plus"
-                            actionListener="#{serviciosController.nuevoServicio}"
+                            actionListener="#{ServicioController.nuevoServicio}"
                             update=":form-modal:panelServicio"
                             oncomplete="PF('dlgServicio').show()" />
             </p:menubar>
 
-            <p:dataTable value="#{serviciosController.listaServicios}" var="s" id="tabla-servicios"
+            <p:dataTable value="#{ServicioController.listaServicios}" var="s" id="tabla-servicios"
                          paginator="true" rows="5" responsiveLayout="scroll">
 
                 <f:facet name="header">
@@ -37,11 +37,11 @@
                 </p:column>
                 <p:column headerText="Acciones">
                     <p:commandButton value="Editar" icon="pi pi-pencil"
-                                     actionListener="#{serviciosController.editarServicio(s)}"
+                                     actionListener="#{ServicioController.editarServicio(s)}"
                                      update=":form-modal:panelServicio"
                                      oncomplete="PF('dlgServicio').show()" />
                     <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
-                                     actionListener="#{serviciosController.confirmarEliminar(s)}"
+                                     actionListener="#{ServicioController.confirmarEliminar(s)}"
                                      oncomplete="PF('dlgEliminarServicio').show()" />
                 </p:column>
             </p:dataTable>
@@ -54,21 +54,21 @@
             <p:outputPanel id="panelServicio" class="ui-fluid">
                 <div class="field">
                     <p:outputLabel for="nombre" value="Nombre:" />
-                    <p:inputText id="nombre" value="#{serviciosController.servicioSeleccionado.nombre}" />
+                    <p:inputText id="nombre" value="#{ServicioController.servicioSeleccionado.nombre}" />
                 </div>
                 <div class="field">
                     <p:outputLabel for="precio" value="Precio:" />
-                    <p:inputText id="precio" value="#{serviciosController.servicioSeleccionado.precio}" />
+                    <p:inputText id="precio" value="#{ServicioController.servicioSeleccionado.precio}" />
                 </div>
                 <div class="field">
                     <p:outputLabel for="duracion" value="Duración (min):" />
-                    <p:inputText id="duracion" value="#{serviciosController.servicioSeleccionado.duracion}" />
+                    <p:inputText id="duracion" value="#{ServicioController.servicioSeleccionado.duracion}" />
                 </div>
             </p:outputPanel>
 
             <f:facet name="footer">
                 <p:commandButton value="Guardar" icon="pi pi-check"
-                                 actionListener="#{serviciosController.guardarServicio}"
+                                 actionListener="#{ServicioController.guardarServicio}"
                                  update=":form-servicios:tabla-servicios :form-servicios:msgServicios"
                                  oncomplete="PF('dlgServicio').hide()" />
                 <p:commandButton value="Cancelar" icon="pi pi-times"
@@ -80,7 +80,7 @@
         <p:confirmDialog widgetVar="dlgEliminarServicio" message="¿Eliminar este servicio?"
                          header="Confirmación" severity="warn">
             <p:commandButton value="Sí" icon="pi pi-check" class="ui-button-danger"
-                             actionListener="#{serviciosController.eliminarServicio}"
+                             actionListener="#{ServicioController.eliminarServicio}"
                              update=":form-servicios:tabla-servicios :form-servicios:msgServicios"
                              oncomplete="PF('dlgEliminarServicio').hide()" />
             <p:commandButton value="No" icon="pi pi-times"

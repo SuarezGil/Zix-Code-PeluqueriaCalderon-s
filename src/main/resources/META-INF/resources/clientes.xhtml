@@ -11,12 +11,12 @@
 
             <p:menubar>
                 <p:menuitem value="Nuevo cliente" icon="pi pi-user-plus"
-                            actionListener="#{clientesController.nuevoCliente}"
+                            actionListener="#{ClienteController.nuevoCliente}"
                             update=":form-modal:panelCliente"
                             oncomplete="PF('dlgCliente').show()" />
             </p:menubar>
 
-            <p:dataTable value="#{clientesController.listaClientes}" var="c" id="tabla-clientes"
+            <p:dataTable value="#{ClienteController.listaClientes}" var="c" id="tabla-clientes"
                          paginator="true" rows="5" responsiveLayout="scroll">
 
                 <f:facet name="header">
@@ -40,11 +40,11 @@
                 </p:column>
                 <p:column headerText="Acciones">
                     <p:commandButton value="Editar" icon="pi pi-pencil"
-                                     actionListener="#{clientesController.editarCliente(c)}"
+                                     actionListener="#{ClienteController.editarCliente(c)}"
                                      update=":form-modal:panelCliente"
                                      oncomplete="PF('dlgCliente').show()" />
                     <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
-                                     actionListener="#{clientesController.confirmarEliminar(c)}"
+                                     actionListener="#{ClienteController.confirmarEliminar(c)}"
                                      oncomplete="PF('dlgEliminarCliente').show()" />
                 </p:column>
             </p:dataTable>
@@ -57,25 +57,25 @@
             <p:outputPanel id="panelCliente" class="ui-fluid">
                 <div class="field">
                     <p:outputLabel for="nombre" value="Nombre:" />
-                    <p:inputText id="nombre" value="#{clientesController.clienteSeleccionado.nombre}" />
+                    <p:inputText id="nombre" value="#{ClienteController.clienteSeleccionado.nombre}" />
                 </div>
                 <div class="field">
                     <p:outputLabel for="apellido" value="Apellido:" />
-                    <p:inputText id="apellido" value="#{clientesController.clienteSeleccionado.apellido}" />
+                    <p:inputText id="apellido" value="#{ClienteController.clienteSeleccionado.apellido}" />
                 </div>
                 <div class="field">
                     <p:outputLabel for="telefono" value="Teléfono:" />
-                    <p:inputText id="telefono" value="#{clientesController.clienteSeleccionado.telefono}" />
+                    <p:inputText id="telefono" value="#{ClienteController.clienteSeleccionado.telefono}" />
                 </div>
                 <div class="field">
                     <p:outputLabel for="correo" value="Correo:" />
-                    <p:inputText id="correo" value="#{clientesController.clienteSeleccionado.correo}" />
+                    <p:inputText id="correo" value="#{ClienteController.clienteSeleccionado.correo}" />
                 </div>
             </p:outputPanel>
 
             <f:facet name="footer">
                 <p:commandButton value="Guardar" icon="pi pi-check"
-                                 actionListener="#{clientesController.guardarCliente}"
+                                 actionListener="#{ClienteController.guardarCliente}"
                                  update=":form-clientes:tabla-clientes :form-clientes:msgClientes"
                                  oncomplete="PF('dlgCliente').hide()" />
                 <p:commandButton value="Cancelar" icon="pi pi-times"
@@ -87,7 +87,7 @@
         <p:confirmDialog widgetVar="dlgEliminarCliente" message="¿Eliminar este cliente?"
                          header="Confirmación" severity="warn">
             <p:commandButton value="Sí" icon="pi pi-check" class="ui-button-danger"
-                             actionListener="#{clientesController.eliminarCliente}"
+                             actionListener="#{ClienteController.eliminarCliente}"
                              update=":form-clientes:tabla-clientes :form-clientes:msgClientes"
                              oncomplete="PF('dlgEliminarCliente').hide()" />
             <p:commandButton value="No" icon="pi pi-times"
