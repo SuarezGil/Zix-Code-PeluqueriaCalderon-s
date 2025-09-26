@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Gestión de Empleados</title>
+</h:head>
+<h:body style="background-color:#f4f6f9;">
+
+    <h:form id="empleadosForm">
+        <p:growl id="messages" showDetail="true" life="3000"/>
+
+        <p:panel header="Gestión de Empleados" style="width:90%; margin:auto; margin-top:30px;">
+
+            <!-- Tabla de empleados -->
+            <p:dataTable id="empleadosTable" var="empleado" value="#{empleadoBean.empleados}"
+                         paginator="true" rows="10"
+                         selection="#{empleadoBean.empleadoSeleccionado}"
+                         selectionMode="single"
+                         rowKey="#{empleado.id}"
+                         style="width:100%">
+
+                <p:column headerText="ID" field="id" sortBy="#{empleado.id}" filterBy="#{empleado.id}">
+                    <h:outputText value="#{empleado.id}"/>
+                </p:column>
+
+                <p:column headerText="Nombre" sortBy="#{empleado.nombre}" filterBy="#{empleado.nombre}">
+                    <h:outputText value="#{empleado.nombre}"/>
+                </p:column>
+
+                <p:column headerText="Email" sortBy="#{empleado.email}" filterBy="#{empleado.email}">
+                    <h:outputText value="#{empleado.email}"/>
+                </p:column>
+
+                <p:column headerText="Teléfono">
+                    <h:outputText value="#{empleado.telefono}"/>
+                </p:column>
+
+                <p:column headerText="Puesto">
+                    <h:outputText value="#{empleado.puesto}"/>
+                </p:column>
+
+                <p:column headerText="Fecha Contratación">
+                    <h:outputText value="#{empleado.fechaContratacion}"/>
+                </p:column>
+
+                <p:column headerText="Activo">
+                    <h:outputText value="#{empleado.activo ? 'Sí' : 'No'}"/>
+                </p:column>
+
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Editar" icon="pi pi-pencil"
+                                     oncomplete="PF('dlgEmpleado').show()"
+                                     update=":empleadosForm:empleadoDialog"
+                                     actionListener="#{empleadoBean.prepararEdicion(empleado)}"/>
+
+                    <p:commandButton value="Eliminar" icon="pi pi-trash" styleClass="ui-button-danger"
+                                     actionListener="#{empleadoBean.eliminarEmpleado(empleado.id)}"
+                                     update="empleadosTable messages"/>
+                </p:column>
+            </p:dataTable>
+
+            <!-- Botón para crear -->
+            <p:commandButton value="Nuevo Empleado" icon="pi pi-plus"
+                             style="margin-top:20px;"
+                             oncomplete="PF('dlgEmpleado').show()"
+                             update=":empleadosForm:empleadoDialog"
+                             actionListener="#{empleadoBean.prepararNuevo()}"/>
+        </p:panel>
+
+        <!-- Diálogo para Crear/Editar -->
+        <p:dialog header="Empleado" widgetVar="dlgEmpleado" modal="true" resizable="false" id="empleadoDialog">
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputLabel value="Nombre:"/>
+                <p:inputText value="#{empleadoBean.empleadoActual.nombre}" required="true"/>
+
+                <h:outputLabel value="Email:"/>
+                <p:inputText value="#{empleadoBean.empleadoActual.email}" required="true"/>
+
+                <h:outputLabel value="Teléfono:"/>
+                <p:inputText value="#{empleadoBean.empleadoActual.telefono}" required="true"/>
+
+                <h:outputLabel value="Puesto:"/>
+                <p:inputText value="#{empleadoBean.empleadoActual.puesto}" required="true"/>
+
+                <h:outputLabel value="Fecha Contratación:"/>
+                <p:datePicker value="#{empleadoBean.empleadoActual.fechaContratacion}" pattern="yyyy-MM-dd"/>
+
+                <h:outputLabel value="Activo:"/>
+                <p:selectBooleanCheckbox value="#{empleadoBean.empleadoActual.activo}"/>
+            </h:panelGrid>
+
+            <f:facet name="footer">
+                <p:commandButton value="Guardar" actionListener="#{empleadoBean.guardarEmpleado}"
+                                 update="empleadosTable messages"
+                                 oncomplete="PF('dlgEmpleado').hide()"/>
+                <p:commandButton value="Cancelar" onclick="PF('dlgEmpleado').hide()" type="button"/>
+            </f:facet>
+        </p:dialog>
+    </h:form>
+</h:body>
+</html>
