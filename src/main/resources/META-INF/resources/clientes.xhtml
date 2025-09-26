@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+    <h:form id="form-clientes">
+        <div class="card">
+            <p:growl id="msgClientes" showDetail="true" />
+
+            <p:menubar>
+                <p:menuitem value="Nuevo cliente" icon="pi pi-user-plus"
+                            actionListener="#{clientesController.nuevoCliente}"
+                            update=":form-modal:panelCliente"
+                            oncomplete="PF('dlgCliente').show()" />
+            </p:menubar>
+
+            <p:dataTable value="#{clientesController.listaClientes}" var="c" id="tabla-clientes"
+                         paginator="true" rows="5" responsiveLayout="scroll">
+
+                <f:facet name="header">
+                    <h3>Gestión de Clientes</h3>
+                </f:facet>
+
+                <p:column headerText="Código" sortBy="#{c.codigo}">
+                    <h:outputText value="#{c.codigo}" />
+                </p:column>
+                <p:column headerText="Nombre" filterBy="#{c.nombre}" sortBy="#{c.nombre}">
+                    <h:outputText value="#{c.nombre}" />
+                </p:column>
+                <p:column headerText="Apellido">
+                    <h:outputText value="#{c.apellido}" />
+                </p:column>
+                <p:column headerText="Teléfono">
+                    <h:outputText value="#{c.telefono}" />
+                </p:column>
+                <p:column headerText="Correo">
+                    <h:outputText value="#{c.correo}" />
+                </p:column>
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Editar" icon="pi pi-pencil"
+                                     actionListener="#{clientesController.editarCliente(c)}"
+                                     update=":form-modal:panelCliente"
+                                     oncomplete="PF('dlgCliente').show()" />
+                    <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
+                                     actionListener="#{clientesController.confirmarEliminar(c)}"
+                                     oncomplete="PF('dlgEliminarCliente').show()" />
+                </p:column>
+            </p:dataTable>
+        </div>
+    </h:form>
+
+    <!-- Modal Cliente -->
+    <h:form id="form-modal">
+        <p:dialog header="Detalle del Cliente" widgetVar="dlgCliente" modal="true" responsive="true">
+            <p:outputPanel id="panelCliente" class="ui-fluid">
+                <div class="field">
+                    <p:outputLabel for="nombre" value="Nombre:" />
+                    <p:inputText id="nombre" value="#{clientesController.clienteSeleccionado.nombre}" />
+                </div>
+                <div class="field">
+                    <p:outputLabel for="apellido" value="Apellido:" />
+                    <p:inputText id="apellido" value="#{clientesController.clienteSeleccionado.apellido}" />
+                </div>
+                <div class="field">
+                    <p:outputLabel for="telefono" value="Teléfono:" />
+                    <p:inputText id="telefono" value="#{clientesController.clienteSeleccionado.telefono}" />
+                </div>
+                <div class="field">
+                    <p:outputLabel for="correo" value="Correo:" />
+                    <p:inputText id="correo" value="#{clientesController.clienteSeleccionado.correo}" />
+                </div>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Guardar" icon="pi pi-check"
+                                 actionListener="#{clientesController.guardarCliente}"
+                                 update=":form-clientes:tabla-clientes :form-clientes:msgClientes"
+                                 oncomplete="PF('dlgCliente').hide()" />
+                <p:commandButton value="Cancelar" icon="pi pi-times"
+                                 onclick="PF('dlgCliente').hide()" type="button" />
+            </f:facet>
+        </p:dialog>
+
+        <!-- Confirmación de eliminación -->
+        <p:confirmDialog widgetVar="dlgEliminarCliente" message="¿Eliminar este cliente?"
+                         header="Confirmación" severity="warn">
+            <p:commandButton value="Sí" icon="pi pi-check" class="ui-button-danger"
+                             actionListener="#{clientesController.eliminarCliente}"
+                             update=":form-clientes:tabla-clientes :form-clientes:msgClientes"
+                             oncomplete="PF('dlgEliminarCliente').hide()" />
+            <p:commandButton value="No" icon="pi pi-times"
+                             onclick="PF('dlgEliminarCliente').hide()" type="button" />
+        </p:confirmDialog>
+    </h:form>
+</h:body>
+</html>

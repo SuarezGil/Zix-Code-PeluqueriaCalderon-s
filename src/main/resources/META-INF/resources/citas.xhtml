@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+    <h:form id="form-citas">
+        <div class="card">
+            <p:growl id="msgCitas" showDetail="true" />
+
+            <p:menubar>
+                <p:menuitem value="Nueva cita" icon="pi pi-calendar-plus"
+                            actionListener="#{citasController.nuevaCita}"
+                            update=":form-modal:panelCita"
+                            oncomplete="PF('dlgCita').show()" />
+            </p:menubar>
+
+            <p:dataTable value="#{citasController.listaCitas}" var="c" id="tabla-citas"
+                         paginator="true" rows="5" responsiveLayout="scroll">
+
+                <f:facet name="header">
+                    <h3>Gestión de Citas</h3>
+                </f:facet>
+
+                <p:column headerText="Código" sortBy="#{c.codigo}">
+                    <h:outputText value="#{c.codigo}" />
+                </p:column>
+                <p:column headerText="Cliente">
+                    <h:outputText value="#{c.cliente.nombre}" />
+                </p:column>
+                <p:column headerText="Servicio">
+                    <h:outputText value="#{c.servicio.nombre}" />
+                </p:column>
+                <p:column headerText="Fecha">
+                    <h:outputText value="#{c.fecha}" />
+                </p:column>
+                <p:column headerText="Hora">
+                    <h:outputText value="#{c.hora}" />
+                </p:column>
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Editar" icon="pi pi-pencil"
+                                     actionListener="#{citasController.editarCita(c)}"
+                                     update=":form-modal:panelCita"
+                                     oncomplete="PF('dlgCita').show()" />
+                    <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
+                                     actionListener="#{citasController.confirmarEliminar(c)}"
+                                     oncomplete="PF('dlgEliminarCita').show()" />
+                </p:column>
+            </p:dataTable>
+        </div>
+    </h:form>
+
+    <!-- Modal Cita -->
+    <h:form id="form-modal">
+        <p:dialog header="Detalle de la Cita" widgetVar="dlgCita" modal="true" responsive="true">
+            <p:outputPanel id="panelCita" class="ui-fluid">
+                <div class="field">
+                    <p:outputLabel for="cliente" value="Cliente:" />
+                    <p:inputText id="cliente" value="#{citasController.citaSeleccionada.cliente.nombre}" />
+                </div>
+                <div class="field">
+                    <p:outputLabel for="servicio" value="Servicio:" />
+                    <p:inputText id="servicio" value="#{citasController.citaSeleccionada.servicio.nombre}" />
+                </div>
+                <div class="field">
+                    <p:outputLabel for="fecha" value="Fecha:" />
+                    <p:calendar id="fecha" value="#{citasController.citaSeleccionada.fecha}" pattern="dd/MM/yyyy"/>
+                </div>
+                <div class="field">
+                    <p:outputLabel for="hora" value="Hora:" />
+                    <p:inputMask id="hora" value="#{citasController.citaSeleccionada.hora}" mask="99:99"/>
+                </div>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Guardar" icon="pi pi-check"
+                                 actionListener="#{citasController.guardarCita}"
+                                 update=":form-citas:tabla-citas :form-citas:msgCitas"
+                                 oncomplete="PF('dlgCita').hide()" />
+                <p:commandButton value="Cancelar" icon="pi pi-times"
+                                 onclick="PF('dlgCita').hide()" type="button" />
+            </f:facet>
+        </p:dialog>
+
+        <!-- Confirmación de eliminación -->
+        <p:confirmDialog widgetVar="dlgEliminarCita" message="¿Eliminar esta cita?"
+                         header="Confirmación" severity="warn">
+            <p:commandButton value="Sí" icon="pi pi-check" class="ui-button-danger"
+                             actionListener="#{citasController.eliminarCita}"
+                             update=":form-citas:tabla-citas :form-citas:msgCitas"
+                             oncomplete="PF('dlgEliminarCita').hide()" />
+            <p:commandButton value="No" icon="pi pi-times"
+                             onclick="PF('dlgEliminarCita').hide()" type="button" />
+        </p:confirmDialog>
+    </h:form>
+</h:body>
+</html>

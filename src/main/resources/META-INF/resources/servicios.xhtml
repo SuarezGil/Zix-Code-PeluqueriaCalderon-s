@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+    <h:form id="form-servicios">
+        <div class="card">
+            <p:growl id="msgServicios" showDetail="true" />
+
+            <p:menubar>
+                <p:menuitem value="Nuevo servicio" icon="pi pi-plus"
+                            actionListener="#{serviciosController.nuevoServicio}"
+                            update=":form-modal:panelServicio"
+                            oncomplete="PF('dlgServicio').show()" />
+            </p:menubar>
+
+            <p:dataTable value="#{serviciosController.listaServicios}" var="s" id="tabla-servicios"
+                         paginator="true" rows="5" responsiveLayout="scroll">
+
+                <f:facet name="header">
+                    <h3>Gestión de Servicios</h3>
+                </f:facet>
+
+                <p:column headerText="Código" sortBy="#{s.codigo}">
+                    <h:outputText value="#{s.codigo}" />
+                </p:column>
+                <p:column headerText="Nombre" filterBy="#{s.nombre}" sortBy="#{s.nombre}">
+                    <h:outputText value="#{s.nombre}" />
+                </p:column>
+                <p:column headerText="Precio">
+                    <h:outputText value="#{s.precio}" />
+                </p:column>
+                <p:column headerText="Duración (min)">
+                    <h:outputText value="#{s.duracion}" />
+                </p:column>
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Editar" icon="pi pi-pencil"
+                                     actionListener="#{serviciosController.editarServicio(s)}"
+                                     update=":form-modal:panelServicio"
+                                     oncomplete="PF('dlgServicio').show()" />
+                    <p:commandButton value="Eliminar" icon="pi pi-trash" class="ui-button-danger"
+                                     actionListener="#{serviciosController.confirmarEliminar(s)}"
+                                     oncomplete="PF('dlgEliminarServicio').show()" />
+                </p:column>
+            </p:dataTable>
+        </div>
+    </h:form>
+
+    <!-- Modal Servicio -->
+    <h:form id="form-modal">
+        <p:dialog header="Detalle del Servicio" widgetVar="dlgServicio" modal="true" responsive="true">
+            <p:outputPanel id="panelServicio" class="ui-fluid">
+                <div class="field">
+                    <p:outputLabel for="nombre" value="Nombre:" />
+                    <p:inputText id="nombre" value="#{serviciosController.servicioSeleccionado.nombre}" />
+                </div>
+                <div class="field">
+                    <p:outputLabel for="precio" value="Precio:" />
+                    <p:inputText id="precio" value="#{serviciosController.servicioSeleccionado.precio}" />
+                </div>
+                <div class="field">
+                    <p:outputLabel for="duracion" value="Duración (min):" />
+                    <p:inputText id="duracion" value="#{serviciosController.servicioSeleccionado.duracion}" />
+                </div>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Guardar" icon="pi pi-check"
+                                 actionListener="#{serviciosController.guardarServicio}"
+                                 update=":form-servicios:tabla-servicios :form-servicios:msgServicios"
+                                 oncomplete="PF('dlgServicio').hide()" />
+                <p:commandButton value="Cancelar" icon="pi pi-times"
+                                 onclick="PF('dlgServicio').hide()" type="button" />
+            </f:facet>
+        </p:dialog>
+
+        <!-- Confirmación de eliminación -->
+        <p:confirmDialog widgetVar="dlgEliminarServicio" message="¿Eliminar este servicio?"
+                         header="Confirmación" severity="warn">
+            <p:commandButton value="Sí" icon="pi pi-check" class="ui-button-danger"
+                             actionListener="#{serviciosController.eliminarServicio}"
+                             update=":form-servicios:tabla-servicios :form-servicios:msgServicios"
+                             oncomplete="PF('dlgEliminarServicio').hide()" />
+            <p:commandButton value="No" icon="pi pi-times"
+                             onclick="PF('dlgEliminarServicio').hide()" type="button" />
+        </p:confirmDialog>
+    </h:form>
+</h:body>
+</html>

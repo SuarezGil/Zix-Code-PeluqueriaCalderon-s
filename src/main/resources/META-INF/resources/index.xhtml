@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<h:html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Barbería - Sistema de Gestión</title>
+    </h:head>
+    <h:body>
+        <h:form id="formPrincipal">
+            <p:growl id="mensajes" showDetail="true" />
+
+            <!-- Barra de navegación -->
+            <div class="card">
+                <p:menubar>
+                    <p:menuitem value="Clientes" icon="pi pi-users"
+                                actionListener="#{indexController.setVista('clientes')}"
+                                update=":contenido" />
+                    <p:menuitem value="Servicios" icon="pi pi-briefcase"
+                                actionListener="#{indexController.setVista('servicios')}"
+                                update=":contenido" />
+                    <p:menuitem value="Citas" icon="pi pi-calendar"
+                                actionListener="#{indexController.setVista('citas')}"
+                                update=":contenido" />
+                    <p:menuitem value="Facturas" icon="pi pi-file"
+                                actionListener="#{indexController.setVista('facturas')}"
+                                update=":contenido" />
+                </p:menubar>
+            </div>
+        </h:form>
+
+        <!-- Aquí se carga dinámicamente la vista seleccionada -->
+        <h:panelGroup id="contenido">
+            <ui:include src="/views/#{indexController.vista}.xhtml" />
+        </h:panelGroup>
+    </h:body>
+</h:html>
