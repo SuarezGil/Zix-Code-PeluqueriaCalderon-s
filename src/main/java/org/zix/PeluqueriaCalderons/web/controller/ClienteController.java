@@ -17,7 +17,7 @@ import org.zix.PeluqueriaCalderons.dominio.service.ClienteService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clientes/v1")
+@RequestMapping("/clientes")
 @Tag(name = "Clientes", description = "Operaciones (CRUD) sobre los clientes de PeluqueriaCalderons")
 public class ClienteController {
     private final ClienteService clienteService;

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Gestión de Clientes</title>
+</h:head>
+<h:body>
+    <h:form id="formClientes">
+        <p:panel header="Clientes">
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:commandButton value="Nuevo" icon="pi pi-plus"
+                                     actionListener="#{clienteBean.prepararNuevo}"
+                                     oncomplete="PF('dlgClienteWV').show()"
+                                     update=":formClientes:dlgCliente"/>
+                    <p:commandButton value="Editar" icon="pi pi-pencil"
+                                     actionListener="#{clienteBean.prepararEditar}"
+                                     oncomplete="PF('dlgClienteWV').show()"
+                                     update=":formClientes:dlgCliente"
+                                     disabled="#{clienteBean.clienteSeleccionado eq null}"/>
+                    <p:commandButton value="Eliminar" icon="pi pi-trash"
+                                     actionListener="#{clienteBean.eliminarCliente}"
+                                     update=":formClientes:dataTableClientes"
+                                     disabled="#{clienteBean.clienteSeleccionado eq null}"/>
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <p:dataTable id="dataTableClientes" value="#{clienteBean.clientes}"
+                         var="cliente" selection="#{clienteBean.clienteSeleccionado}"
+                         selectionMode="single" rowKey="#{cliente.codigoCliente}"
+                         paginator="true" rows="10" style="margin-top:10px;">
+                <p:column headerText="Código">
+                    <h:outputText value="#{cliente.codigoCliente}"/>
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{cliente.name}"/>
+                </p:column>
+                <p:column headerText="Teléfono">
+                    <h:outputText value="#{cliente.tel}"/>
+                </p:column>
+                <p:column headerText="Correo">
+                    <h:outputText value="#{cliente.email}"/>
+                </p:column>
+                <p:column headerText="Fecha Registro">
+                    <h:outputText value="#{cliente.registrationDate}"/>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+
+        <!-- Diálogo para agregar/editar cliente -->
+        <p:dialog id="dlgCliente" header="Cliente" widgetVar="dlgClienteWV" modal="true" resizable="false">
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputLabel for="name" value="Nombre:"/>
+                <p:inputText id="name" value="#{clienteBean.clienteActual.name}" required="true"/>
+
+                <h:outputLabel for="tel" value="Teléfono:"/>
+                <p:inputText id="tel" value="#{clienteBean.clienteActual.tel}" required="true"/>
+
+                <h:outputLabel for="email" value="Correo:"/>
+                <p:inputText id="email" value="#{clienteBean.clienteActual.email}" required="true"/>
+
+                <h:outputLabel for="registrationDate" value="Fecha Registro:"/>
+                <p:calendar id="registrationDate" value="#{clienteBean.clienteActual.registrationDate}"
+                            pattern="yyyy-MM-dd" showButtonPanel="true"/>
+            </h:panelGrid>
+
+            <f:facet name="footer">
+                <p:commandButton value="Guardar" icon="pi pi-check"
+                                 actionListener="#{clienteBean.guardarCliente}"
+                                 update=":formClientes:dataTableClientes"
+                                 oncomplete="PF('dlgClienteWV').hide()"/>
+                <p:commandButton value="Cancelar" icon="pi pi-times"
+                                 onclick="PF('dlgClienteWV').hide();" type="button"/>
+            </f:facet>
+        </p:dialog>
+    </h:form>
+</h:body>
+</html>
