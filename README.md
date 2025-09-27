@@ -1,0 +1,1 @@
+https://cetkinal-my.sharepoint.com/personal/zlopez-2023241_kinal_edu_gt/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fzlopez%2D2023241%5Fkinal%5Fedu%5Fgt%2FDocuments%2FPresentacion%20Proyecto%20PeluqueriaCalderon%27s&ga=1
