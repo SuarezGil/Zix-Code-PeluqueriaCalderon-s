@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<f:metadata>
+    <f:event type="preRenderView" listener="#{loginBean.verificarSesion}"/>
+</f:metadata>
+
+<h:head>
+    <title>Menú Principal - Peluquería Calderons</title>
+    <style>
+        .header-bar {
+            width: 100%;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .menu-options {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            border-top: 1px solid #eaeaea;
+            color: #7f8c8d;
+            font-size: 12px;
+            background-color: #f8f9fa;
+        }
+        .menu-button {
+            min-width: 200px;
+            height: 80px;
+            margin: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .user-info {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+        .admin-badge {
+            background-color: #e74c3c;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .empleado-badge {
+            background-color: #27ae60;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+    </style>
+</h:head>
+<h:body style="background-color: #f5f5f5; margin: 0; padding: 0; min-height: 100vh;">
+
+    <div class="header-bar">
+        <h:outputText value="Peluquería Calderons - Sistema de Gestión"
+                      style="font-size: 28px; font-weight: bold;"/>
+        <br/>
+        <h:outputText value="Sistema Integral de Administración"
+                      style="font-size: 16px; opacity: 0.9;"/>
+    </div>
+
+    <h:form>
+        <p:panel header="Menú Principal" style="width:700px; margin:auto; margin-top:40px;"
+                 styleClass="ui-shadow-5">
+
+            <p:growl id="growl" showDetail="true" life="3000"/>
+
+            <div style="padding: 25px;">
+                <!-- Información del usuario -->
+                <div class="user-info">
+                    <h:outputText value="¡Bienvenido, #{loginBean.usuarioLogueado.username}!"
+                                  style="font-size: 20px; font-weight: bold; color: #2c3e50;"/>
+                    <br/>
+                    <h:outputText value="Rol: #{loginBean.usuarioLogueado.rol}"
+                                  style="font-size: 16px; color: #7f8c8d;"/>
+                    <h:outputText value="ADMIN" rendered="#{loginBean.usuarioLogueado.rol == 'ADMIN'}"
+                                  styleClass="admin-badge"/>
+                    <h:outputText value="EMPLEADO" rendered="#{loginBean.usuarioLogueado.rol == 'EMPLEADO'}"
+                                  styleClass="empleado-badge"/>
+                    <br/>
+                    <h:outputText value="Fecha de ingreso: #{loginBean.usuarioLogueado.fechaCreacion}"
+                                  style="font-size: 14px; color: #95a5a6;"/>
+                </div>
+
+                <p:separator/>
+
+                <!-- Botones del menú principal -->
+                <div class="menu-options">
+                    <h3 style="color: #2c3e50; margin-bottom: 20px;">Módulos del Sistema</h3>
+
+                    <!-- Gestión de Empleados -->
+                    <p:commandButton value="Gestión de Empleados" icon="pi pi-users"
+                                     styleClass="menu-button"
+                                     style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white;"
+                                     action="empleados?faces-redirect=true"/>
+
+                    <!-- Gestión de Inventario -->
+                    <p:commandButton value="Gestión de Inventario" icon="pi pi-box"
+                                     styleClass="menu-button"
+                                     style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%); color: white;"
+                                     action="inventario?faces-redirect=true"/>
+
+                    <!-- Gestión de Usuarios (solo admin) -->
+                    <p:commandButton value="Gestión de Usuarios" icon="pi pi-user-plus"
+                                     styleClass="menu-button"
+                                     style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white;"
+                                     action="usuarios?faces-redirect=true"
+                                     rendered="#{loginBean.usuarioLogueado.rol == 'ADMIN'}"/>
+
+                    <!-- Gestión de Clientes -->
+                    <p:commandButton value="Gestión de Clientes" icon="pi pi-id-card"
+                                     styleClass="menu-button"
+                                     style="background: linear-gradient(135deg, #8e44ad 0%, #6c3483 100%); color: white;"
+                                     action="clientes?faces-redirect=true"/>
+
+                    <p:commandButton value="Gestión de Citas" icon="pi pi-id-card"
+                                     styleClass="menu-button"
+                                     style="background: linear-gradient(135deg, #8e44ad 0%, #6c3483 100%); color: white;"
+                                     action="citas?faces-redirect=true"/>
+                </div>
+
+
+                <p:separator/>
+
+                <!-- Botón de cerrar sesión -->
+                <div style="text-align: center; margin-top: 20px;">
+                    <p:commandButton value="Cerrar Sesión" action="#{loginBean.logout}"
+                                     icon="pi pi-power-off"
+                                     styleClass="ui-button-danger"
+                                     style="padding: 10px 20px; font-size: 14px;"/>
+                </div>
+            </div>
+
+            <!-- Pie de página -->
+            <div class="footer">
+                <i class="pi pi-shield" style="margin-right: 5px;"></i>
+                Sesión activa - #{loginBean.usuarioLogueado.username} |
+                Último acceso: #{java.time.LocalDateTime.now()}
+            </div>
+        </p:panel>
+    </h:form>
+
+</h:body>
+</html>

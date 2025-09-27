@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Gestión de Usuarios</title>
+</h:head>
+<h:body>
+
+    <h:form id="formUsuarios">
+
+        <p:panel header="Gestión de Usuarios" style="width:800px; margin:auto; margin-top:40px;"
+                 styleClass="ui-shadow-5">
+
+            <p:growl id="growl" showDetail="true" life="3000"/>
+
+            <!-- Tabla de Usuarios -->
+            <p:dataTable id="tablaUsuarios" var="u" value="#{usuariosBean.usuarios}"
+                         paginator="true" rows="5" style="margin-top:20px">
+
+                <p:column headerText="ID">
+                    <h:outputText value="#{u.id}" />
+                </p:column>
+
+                <p:column headerText="Usuario">
+                    <h:outputText value="#{u.username}" />
+                </p:column>
+
+                <p:column headerText="Rol">
+                    <h:outputText value="#{u.rol}" />
+                </p:column>
+
+                <p:column headerText="Fecha de Creación">
+                    <h:outputText value="#{u.fechaCreacion}" />
+                </p:column>
+
+                <p:column headerText="Activo">
+                    <h:outputText value="#{u.activo ? 'Sí' : 'No'}" />
+                </p:column>
+
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Editar" icon="pi pi-pencil"
+                                     actionListener="#{usuariosBean.prepararEdicion(u)}"
+                                     update=":formUsuarios:dialogUsuario"
+                                     oncomplete="PF('usuarioDialog').show()"/>
+                    <p:commandButton value="Eliminar" icon="pi pi-trash"
+                                     actionListener="#{usuariosBean.eliminarUsuario(u.id)}"
+                                     update="tablaUsuarios growl"
+                                     styleClass="ui-button-danger"
+                                     onclick="return confirm('¿Seguro que deseas eliminar este usuario?');"/>
+                </p:column>
+            </p:dataTable>
+
+            <!-- Botón nuevo usuario -->
+            <div style="margin-top:20px; text-align:center;">
+                <p:commandButton value="Nuevo Usuario" icon="pi pi-plus"
+                                 actionListener="#{usuariosBean.prepararNuevo}"
+                                 update=":formUsuarios:dialogUsuario"
+                                 oncomplete="PF('usuarioDialog').show()"/>
+            </div>
+
+        </p:panel>
+
+        <!-- Diálogo de Crear/Editar Usuario -->
+        <p:dialog id="dialogUsuario" header="Usuario" widgetVar="usuarioDialog" modal="true"
+                  style="width:500px" resizable="false">
+
+            <h:panelGrid columns="2" cellpadding="5">
+
+                <h:outputLabel for="username" value="Usuario:"/>
+                <p:inputText id="username" value="#{usuariosBean.usuarioActual.username}" required="true"/>
+
+                <h:outputLabel for="password" value="Contraseña:"/>
+                <p:password id="password" value="#{usuariosBean.usuarioActual.password}" feedback="true"/>
+
+                <h:outputLabel for="rol" value="Rol:"/>
+                <p:selectOneMenu id="rol" value="#{usuariosBean.usuarioActual.rol}">
+                    <f:selectItem itemLabel="Seleccione un rol" itemValue="" noSelectionOption="true"/>
+                    <f:selectItem itemLabel="ADMIN" itemValue="ADMIN"/>
+                    <f:selectItem itemLabel="EMPLEADO" itemValue="EMPLEADO"/>
+                </p:selectOneMenu>
+
+                <h:outputLabel for="activo" value="Activo:"/>
+                <p:selectBooleanCheckbox id="activo" value="#{usuariosBean.usuarioActual.activo}"/>
+            </h:panelGrid>
+
+            <f:facet name="footer">
+                <p:commandButton value="Guardar" actionListener="#{usuariosBean.guardarUsuario}"
+                                 update="tablaUsuarios growl"
+                                 oncomplete="PF('usuarioDialog').hide()"/>
+                <p:commandButton value="Cancelar" onclick="PF('usuarioDialog').hide()" type="button"/>
+            </f:facet>
+        </p:dialog>
+
+    </h:form>
+
+</h:body>
+</html>

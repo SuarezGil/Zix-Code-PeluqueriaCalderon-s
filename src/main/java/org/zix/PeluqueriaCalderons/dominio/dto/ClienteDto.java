@@ -2,7 +2,7 @@ package org.zix.PeluqueriaCalderons.dominio.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
-import java.time.LocalDate;
+import java.util.Date;
 
 public class ClienteDto {
 
@@ -18,9 +18,9 @@ public class ClienteDto {
     private String email;
 
     @PastOrPresent(message = "La fecha de registro debe ser anterior a la fecha actual")
-    private LocalDate registrationDate;
+    private Date registrationDate;
 
-    public ClienteDto(Long codigoCliente, String name, String tel, String email, LocalDate registrationDate) {
+    public ClienteDto(Long codigoCliente, String name, String tel, String email, Date registrationDate) {
         this.codigoCliente = codigoCliente;
         this.name = name;
         this.tel = tel;
@@ -33,12 +33,12 @@ public class ClienteDto {
     public String getName() { return name; }
     public String getTel() { return tel; }
     public String getEmail() { return email; }
-    public LocalDate getRegistrationDate() { return registrationDate; }
+    public Date getRegistrationDate() { return registrationDate; }
 
     // Setters
     public void setCodigoCliente(Long codigoCliente) { this.codigoCliente = codigoCliente; }
     public void setName(String name) { this.name = name; }
     public void setTel(String tel) { this.tel = tel; }
     public void setEmail(String email) { this.email = email; }
-    public void setRegistrationDate(LocalDate registrationDate) { this.registrationDate = registrationDate; }
+    public void setRegistrationDate(Date registrationDate) { this.registrationDate = registrationDate; }
 }

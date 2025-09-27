@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Gestión de Inventario</title>
+</h:head>
+<h:body style="background-color:#f4f6f9;">
+
+    <h:form id="inventarioForm">
+        <p:growl id="messages" showDetail="true" life="3000"/>
+
+        <p:panel header="Gestión de Inventario" style="width:90%; margin:auto; margin-top:30px;">
+
+            <!-- Tabla -->
+            <p:dataTable id="inventarioTable" var="inv" value="#{inventarioBean.inventarios}"
+                         paginator="true" rows="10"
+                         selection="#{inventarioBean.inventarioSeleccionado}"
+                         selectionMode="single"
+                         rowKey="#{inv.id}"
+                         style="width:100%">
+
+                <p:column headerText="ID">
+                    <h:outputText value="#{inv.id}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{inv.nombreProducto}" />
+                </p:column>
+                <p:column headerText="Cantidad">
+                    <h:outputText value="#{inv.cantidad}" />
+                </p:column>
+                <p:column headerText="Precio Unitario">
+                    <h:outputText value="#{inv.precioUnitario}" />
+                </p:column>
+                <p:column headerText="Categoría">
+                    <h:outputText value="#{inv.categoria}" />
+                </p:column>
+
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Editar" icon="pi pi-pencil"
+                                     oncomplete="PF('dlgInventario').show()"
+                                     update=":inventarioForm:inventarioDialog"
+                                     actionListener="#{inventarioBean.prepararEdicion(inv)}"/>
+
+                    <p:commandButton value="Eliminar" icon="pi pi-trash" styleClass="ui-button-danger"
+                                     actionListener="#{inventarioBean.eliminarInventario(inv.id)}"
+                                     update="inventarioTable messages"/>
+                </p:column>
+            </p:dataTable>
+
+            <!-- Botón Nuevo -->
+            <p:commandButton value="Nuevo Producto" icon="pi pi-plus"
+                             style="margin-top:20px;"
+                             oncomplete="PF('dlgInventario').show()"
+                             update=":inventarioForm:inventarioDialog"
+                             actionListener="#{inventarioBean.prepararNuevo()}"/>
+        </p:panel>
+
+        <!-- Diálogo -->
+        <p:dialog header="Producto" widgetVar="dlgInventario" modal="true" resizable="false" id="inventarioDialog">
+            <h:panelGrid columns="2" cellpadding="5">
+
+                <h:outputLabel value="Nombre:"/>
+                <p:inputText value="#{inventarioBean.inventarioActual.nombreProducto}" required="true"/>
+
+                <h:outputLabel value="Cantidad:"/>
+                <p:inputText value="#{inventarioBean.inventarioActual.cantidad}" required="true"/>
+
+                <h:outputLabel value="Precio Unitario:"/>
+                <p:inputText value="#{inventarioBean.inventarioActual.precioUnitario}" required="true"/>
+
+                <h:outputLabel value="Categoría:"/>
+                <p:inputText value="#{inventarioBean.inventarioActual.categoria}" />
+
+                <h:outputLabel value="Descripción:"/>
+                <p:inputTextarea value="#{inventarioBean.inventarioActual.descripcion}" rows="3" />
+
+                <h:outputLabel value="Stock Mínimo:"/>
+                <p:inputText value="#{inventarioBean.inventarioActual.minimoStock}" />
+            </h:panelGrid>
+
+            <f:facet name="footer">
+                <p:commandButton value="Guardar" actionListener="#{inventarioBean.guardarInventario}"
+                                 update="inventarioTable messages"
+                                 oncomplete="PF('dlgInventario').hide()"/>
+                <p:commandButton value="Cancelar" onclick="PF('dlgInventario').hide()" type="button"/>
+            </f:facet>
+        </p:dialog>
+    </h:form>
+</h:body>
+</html>

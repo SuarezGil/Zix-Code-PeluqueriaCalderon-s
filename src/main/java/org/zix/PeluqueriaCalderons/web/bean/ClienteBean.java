@@ -12,7 +12,8 @@ import org.zix.PeluqueriaCalderons.dominio.exception.ClienteYaExisteException;
 import org.zix.PeluqueriaCalderons.dominio.service.ClienteService;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Named("clienteBean")
@@ -28,18 +29,17 @@ public class ClienteBean implements Serializable {
     private String textoBusqueda;
 
     public ClienteBean() {
-        this.clienteNuevo = new ClienteDto(null, "", "", "", LocalDate.now());
+        this.clienteNuevo = new ClienteDto(null, "", "", "", new Date());
+        this.clienteSeleccionado = new ClienteDto(null, "", "", "", new Date());
+        this.clientes = new ArrayList<>();
     }
 
     @PostConstruct
-    public void init() {
-        cargarClientes();
-    }
+    public void init() { cargarClientes(); }
 
     public void cargarClientes() {
-        try {
-            clientes = clienteService.obtenerTodo();
-        } catch (Exception e) {
+        try { clientes = clienteService.obtenerTodo(); }
+        catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al cargar clientes: " + e.getMessage()));
         }
@@ -49,7 +49,7 @@ public class ClienteBean implements Serializable {
         try {
             clienteService.guardarCliente(clienteNuevo);
             cargarClientes();
-            clienteNuevo = new ClienteDto(null, "", "", "", LocalDate.now());
+            clienteNuevo = new ClienteDto(null, "", "", "", new Date());
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Cliente guardado correctamente."));
         } catch (ClienteYaExisteException e) {
@@ -70,11 +70,9 @@ public class ClienteBean implements Serializable {
                         clienteSeleccionado.getEmail(),
                         clienteSeleccionado.getRegistrationDate()
                 );
-
                 clienteService.modificarCliente(clienteSeleccionado.getCodigoCliente(), mod);
                 cargarClientes();
-                clienteSeleccionado = null;
-
+                clienteSeleccionado = new ClienteDto(null, "", "", "", new Date());
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Cliente modificado correctamente."));
             } catch (ClienteYaExisteException e) {
@@ -92,8 +90,7 @@ public class ClienteBean implements Serializable {
             try {
                 clienteService.eliminarCliente(clienteSeleccionado.getCodigoCliente());
                 cargarClientes();
-                clienteSeleccionado = null;
-
+                clienteSeleccionado = new ClienteDto(null, "", "", "", new Date());
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Cliente eliminado correctamente."));
             } catch (Exception e) {
@@ -111,15 +108,11 @@ public class ClienteBean implements Serializable {
     }
 
     public void buscarClientePorId() {
-        if (textoBusqueda == null || textoBusqueda.isBlank()) {
-            cargarClientes();
-            return;
-        }
-
+        if (textoBusqueda == null || textoBusqueda.isBlank()) { cargarClientes(); return; }
         try {
             Long codigo = Long.parseLong(textoBusqueda);
             ClienteDto cliente = clienteService.obtenerClientePorCodigo(codigo);
-            clientes = List.of(cliente);
+            clientes = cliente != null ? List.of(cliente) : new ArrayList<>();
         } catch (NumberFormatException e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El código debe ser un número válido"));
@@ -127,13 +120,30 @@ public class ClienteBean implements Serializable {
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Cliente no encontrado"));
-            clientes = List.of();
+            clientes = new ArrayList<>();
+        }
+    }
+
+    public void seleccionarCliente(ClienteDto c) {
+        if (c != null) {
+            this.clienteSeleccionado = new ClienteDto(
+                    c.getCodigoCliente(),
+                    c.getName(),
+                    c.getTel(),
+                    c.getEmail(),
+                    c.getRegistrationDate()
+            );
+        } else {
+            this.clienteSeleccionado = new ClienteDto(null, "", "", "", new Date());
         }
     }
 
     // Getters y Setters
     public List<ClienteDto> getClientes() { return clientes; }
-    public ClienteDto getClienteSeleccionado() { return clienteSeleccionado; }
+    public ClienteDto getClienteSeleccionado() {
+        if (clienteSeleccionado == null) clienteSeleccionado = new ClienteDto(null, "", "", "", new Date());
+        return clienteSeleccionado;
+    }
     public void setClienteSeleccionado(ClienteDto clienteSeleccionado) { this.clienteSeleccionado = clienteSeleccionado; }
     public ClienteDto getClienteNuevo() { return clienteNuevo; }
     public void setClienteNuevo(ClienteDto clienteNuevo) { this.clienteNuevo = clienteNuevo; }
